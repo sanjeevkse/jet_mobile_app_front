@@ -1,0 +1,162 @@
+<!-- list -->
+<ul class="nav">
+  <li ui-sref-active="active" ng-if="[3].indexOf(localStorageMemory.user.user_role_id * 1)>=0">
+    <a ui-sref="app.dashboard">
+      <i class="glyphicon glyphicon-dashboard"></i>
+      <span>Dashboard</span>
+    </a>
+  </li>
+  <li ui-sref-active="active" ng-class="{'active': $state.includes('app.user')}" ng-if="[3].indexOf(localStorageMemory.user.user_role_id * 1)>=0">
+    <a ui-sref="app.user.userForm">
+      <i class="glyphicon glyphicon-user"></i>
+      <span>User</span>
+    </a>
+  </li>
+  <li ui-sref-active="active" ng-class="{'active': $state.includes('app.adminMgmt')}" ng-if="[3].indexOf(localStorageMemory.user.user_role_id * 1)>=0">
+    <a ui-sref="app.adminMgmt">
+      <i class="glyphicon glyphicon-home"></i>
+      <span>Admin Mgmt</span>
+    </a>
+  </li>
+  <!-- <li ui-sref-active="active" ng-class="{'active': $state.includes('app.supplierMgmt')}">
+    <a ui-sref="app.supplierMgmt">
+      <i class="glyphicon glyphicon-th-large"></i>
+      <span>Supplier Mgmt</span>
+    </a>
+  </li> -->
+  <li ui-sref-active="active" ng-class="{'active': $state.includes('app.newBoxTracking')}" ng-if="[3, 40].indexOf(localStorageMemory.user.user_role_id * 1)>=0">
+    <a ui-sref="app.newBoxTracking({t: 'n', id: ''})">
+      <i class="glyphicon glyphicon-plus"></i>
+      <span>New Invoice</span>
+    </a>
+  </li>
+  <li ui-sref-active="active" ng-class="{'active': $state.includes('app.boxTracking')}" ng-if="[3].indexOf(localStorageMemory.user.user_role_id * 1)>=0">
+    <a ui-sref="app.boxTracking">
+      <i class="glyphicon glyphicon-th-large"></i>
+      <span>Import Excels</span>
+    </a>
+  </li>
+  <li ui-sref-active="active" ng-class="{'active': $state.includes('app.manifest2')}" ng-if="[3, 36, 40, 47, 48].indexOf(localStorageMemory.user.user_role_id * 1)>=0">
+    <a ui-sref="app.manifest2">
+      <i class="glyphicon glyphicon-th-large"></i>
+      <span>Manifest</span>
+    </a>
+  </li>
+  <li ui-sref-active="active" ng-class="{'active': $state.includes('app.paymentMgmt')}" ng-if="[3, 40, 47, 48].indexOf(localStorageMemory.user.user_role_id * 1)>=0">
+    <a ui-sref="app.paymentMgmt">
+      <i class="glyphicon glyphicon-credit-card"></i>
+      <span>Receivables</span>
+    </a>
+  </li>
+  <!--<li ui-sref-active="active" ng-class="{'active': $state.includes('app.updateDelete')}" ng-if="[3, 40].indexOf(localStorageMemory.user.user_role_id * 1)>=0">-->
+  <!--  <a ui-sref="app.updateDelete">-->
+  <!--    <i class="glyphicon glyphicon-trash"></i>-->
+  <!--    <span>Updates/Deletes</span>-->
+  <!--  </a>-->
+  <!--</li>-->
+  <li ui-sref-active="active" ng-class="{'active': $state.includes('app.warehouseBoxes')}" ng-if="[3, 40].indexOf(localStorageMemory.user.user_role_id * 1)>=0">
+    <a ui-sref="app.warehouseBoxes">
+      <i class="glyphicon glyphicon-th-large"></i>
+      <span>Boxes in Warehouse</span>
+    </a>
+  </li>
+  <!--<li ui-sref-active="active" ng-class="{'active': $state.includes('app.creditFacility')}" ng-if="[3, 40].indexOf(localStorageMemory.user.user_role_id * 1)>=0">-->
+  <!--  <a ui-sref="app.creditFacility">-->
+  <!--    <i class="glyphicon glyphicon-th-large"></i>-->
+  <!--    <span>Credit Facility</span>-->
+  <!--  </a>-->
+  <!--</li>-->
+  <!--<li ng-if="[3, 40].indexOf(localStorageMemory.user.user_role_id * 1)>=0">-->
+  <!--  <a href class="auto">-->
+  <!--    <span class="pull-right text-muted">-->
+  <!--      <i class="fa fa-fw fa-angle-right text"></i>-->
+  <!--      <i class="fa fa-fw fa-angle-down text-active"></i>-->
+  <!--    </span>-->
+  <!--    <i class="glyphicon glyphicon-th-large"></i>-->
+  <!--    <span>SL & FL</span>-->
+  <!--  </a>-->
+  <!--  <ul class="nav nav-sub dk">-->
+  <!--    <li class="nav-sub-header">-->
+  <!--      <a href>-->
+  <!--        <span>SL & FL</span>-->
+  <!--      </a>-->
+  <!--    </li>-->
+  <!--    <li ui-sref-active="active" ng-class="{'active': $state.includes('app.shippingLineForwarder')}">-->
+  <!--      <a ui-sref="app.shippingLineForwarder({t: 'n'})">-->
+  <!--        <span>Entry</span>-->
+  <!--      </a>-->
+  <!--    </li>-->
+  <!--    <li ui-sref-active="active" ng-class="{'active': $state.includes('app.sLFList')}">-->
+  <!--      <a ui-sref="app.sLFList">-->
+  <!--        <span>List</span>-->
+  <!--      </a>-->
+  <!--    </li>-->
+  <!--    <li ui-sref-active="active" ng-class="{'active': $state.includes('app.sLFPaymentMgmt')}">-->
+  <!--      <a ui-sref="app.sLFPaymentMgmt">-->
+  <!--        <span>Payment</span>-->
+  <!--      </a>-->
+  <!--    </li>-->
+  <!--  </ul>-->
+  <!--</li>-->
+  <li ui-sref-active="active" ng-class="{'active': $state.includes('app.priceDetails')}" ng-if="[3, 36, 40].indexOf(localStorageMemory.user.user_role_id * 1)>=2">
+    <a ui-sref="app.priceDetails">
+      <i class="glyphicon glyphicon-home"></i>
+      <span>Price Details</span>
+    </a>
+  </li>
+  <li ui-sref-active="active" ng-class="{'active': $state.includes('app.reviewMgmt')}" ng-if="[3, 36, 40, 47, 48].indexOf(localStorageMemory.user.user_role_id * 1)>=0">
+    <a ui-sref="app.reviewMgmt">
+      <i class="glyphicon glyphicon-th-large"></i>
+      <span>Mgmt. Reviews</span>
+    </a>
+  </li>
+  <li ui-sref-active="active" ng-class="{'active': $state.includes('app.updateBoxStatus')}" ng-if="[3, 36, 40, 47, 48].indexOf(localStorageMemory.user.user_role_id * 1)>=0">
+    <a ui-sref="app.updateBoxStatus">
+      <i class="glyphicon glyphicon-home"></i>
+      <span>Status</span>
+    </a>
+  </li>
+  <!--<li ui-sref-active="active" ng-class="{'active': $state.includes('app.updateBoxTracking')}" ng-if="[3, 40].indexOf(localStorageMemory.user.user_role_id * 1)>=0">-->
+  <!--  <a ui-sref="app.updateBoxTracking">-->
+  <!--    <i class="glyphicon glyphicon-home"></i>-->
+  <!--    <span>Box Tracking</span>-->
+  <!--  </a>-->
+  <!--</li>-->
+  <li ui-sref-active="active" ng-class="{'active': $state.includes('app.addContainerNumber')}" ng-if="[3, 40].indexOf(localStorageMemory.user.user_role_id * 1)>=0">
+    <a ui-sref="app.addContainerNumber">
+      <i class="glyphicon glyphicon-plus"></i>
+      <span>Container Number</span>
+    </a>
+  </li>
+  <li ui-sref-active="active" ng-class="{'active': $state.includes('app.updateData1')}" ng-if="[3, 40].indexOf(localStorageMemory.user.user_role_id * 1)>=0">
+    <a ui-sref="app.updateData1">
+      <i class="glyphicon glyphicon-home"></i>
+      <span>Container Details</span>
+    </a>
+  </li>
+  <li ui-sref-active="active" ng-class="{'active': $state.includes('app.salesAgentTasks')}" ng-if="[6].indexOf(localStorageMemory.user.user_role_id * 1)>=0">
+    <a ui-sref="app.salesAgentTasks">
+      <i class="glyphicon glyphicon-exclamation-sign"></i>
+      <span>Attention</span>
+    </a>
+  </li>
+  <li ui-sref-active="active" ng-class="{'active': $state.includes('app.boxDetailsSearch')}" ng-if="[6].indexOf(localStorageMemory.user.user_role_id * 1)>=0">
+    <a ui-sref="app.boxDetailsSearch">
+      <i class="glyphicon glyphicon-search"></i>
+      <span>Search</span>
+    </a>
+  </li>
+  <li ui-sref-active="active" ng-class="{'active': $state.includes('app.staffAttendance')}" ng-if="[3, 48].indexOf(localStorageMemory.user.user_role_id * 1)>=0">
+    <a ui-sref="app.staffAttendance.form">
+      <i class="glyphicon glyphicon-check"></i>
+      <span>Staff Attendance</span>
+    </a>
+  </li>
+  <li ui-sref-active="active" ng-class="{'active': $state.includes('app.staffPayroll')}" ng-if="[3].indexOf(localStorageMemory.user.user_role_id * 1)>=0">
+    <a ui-sref="app.staffPayroll">
+      <i class="glyphicon glyphicon-usd"></i>
+      <span>Staff Payroll</span>
+    </a>
+  </li>
+</ul>
+<!-- / list -->

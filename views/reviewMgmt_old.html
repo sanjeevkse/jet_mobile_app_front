@@ -1,0 +1,194 @@
+<!-- hbox layout -->
+<div class="hbox hbox-auto-xs bg-light" ng-controller="reviewMgmtController">
+  <!-- column -->
+  <div class="col">
+    <div class="vbox">
+      <div class="row-row">
+        <div class="wrapper">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="panel panel-default">
+                <div class="panel-body">
+                  <div class="col-md-3">
+                    <h4>Pending tasks for today <b class="text-danger">{{arrNotToday.length}}</b></h4>
+                    <div class="row">
+                        <div class="col-md-12" ng-init="priority=''">
+                            <input type="text" class="form-control" ng-model="searchText" placeholder="Search by invoice number, tracking number" style="margin-bottom: 10px;" />
+                            <select class="form-control" ng-model="priority" ng-options="v.id as v.item_name for v in [{id: '', item_name: 'All'}, {id: '39', item_name: 'Not Reviewed'}, {id: '41', item_name: 'Ok, It\'s Resolved'}, {id: '42', item_name: 'Resolved the problem still need follow up'}, {id: '43', item_name: 'There is a problem, please contact asap to the forwarder or shipper'}]">
+                            </select>
+                        </div>
+                    </div>
+                    <div style="height: 400px; overflow: auto;">
+                      <table class="table table-hover table-bordered table-stripeds">
+                        <tbody>
+                          <tr ng-repeat="v in arrNotToday | filter: priority ? {last_status_data: {box_status_id: priority}} : {} | filter: searchText" ng-click="onClickPendingTask(v)">
+                            <td ng-class="{'custom-bl b-l-success': v.last_status_data.box_status_id*1 == 41, 'custom-bl b-l-warning': v.last_status_data.box_status_id * 1 == 42, 'custom-bl b-l-danger': v.last_status_data.box_status_id * 1 == 43, 'custom-bl b-l-primary': v.last_status_data.box_status_id * 1 == 39}">
+                              <div>
+                                <div>Box Unique Number: {{v.invoice_number}}/{{v.box_unique_number}}</div>
+                                <div>Tracking: {{v.tracking_number}}</div>
+                                <div>Invoice: {{v.invoice_number}}, CBM: {{v.cbm}}</div>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <h4>Box Status Updating (Box Unique Number: {{mainForm.invoice_number.value +'/'+boxDetails.trackingDetails.box_unique_number}})</h4>
+                    <div class="form-group col-md-12">
+                      <label class="control-label">Invoice Number <span class="text-danger text-bold text-lg">*</span></label>
+                      <input type="text" class="form-control" ng-model="mainForm.invoice_number.value" disabled="" />
+                      <span class="text-danger" ng-if="mainForm.invoice_number.error">Please enter valid Invoice Number</span>
+                    </div>
+                    <div class="form-group col-md-12">
+                      <label class="control-label">Box Tracking Number <span class="text-danger text-bold text-lg">*</span></label>
+                      <input type="text" class="form-control" ng-model="mainForm.tracking_number.value" disabled="" />
+                      <span class="text-danger" ng-if="mainForm.tracking_number.error">Please enter valid Box Tracking Number</span>
+                    </div>
+                    <div class="form-group col-md-12">
+                      <label class="control-label">Recent Updated Box Status</label>
+                      <input type="text" class="form-control" ng-model="mainForm.recent_updated_status.value" disabled="" />
+                    </div>
+                    <div class="form-group col-md-12">
+                      <label class="control-label">New Box Status Date <span class="text-danger text-bold text-lg">*</span></label>
+                      <div class="input-group w-sm">
+                        <input 
+                          type="text" 
+                          class="form-control" 
+                          datepicker-popup="{{formats}}" 
+                          ng-model="mainForm.box_status_date.value" 
+                          is-open="opened" 
+                          readonly="true" 
+                          datepicker-options="dateOptions" 
+                          ng-required="true" 
+                          close-text="Close" />
+                        <span class="input-group-btn">
+                          <button type="button" class="btn btn-default" ng-click="openBoxStatusDate($event)" style="margin: 0; margin-left: -1px; height: 34px;">
+                            <i class="glyphicon glyphicon-calendar"></i>
+                          </button>
+                        </span>
+                      </div>
+                      <span class="text-danger" ng-if="mainForm.box_status_date.error">Please enter valid New Box Status Date</span>
+                    </div>
+                    <div class="form-group col-md-12">
+                      <label class="control-label">New Box Status <span class="text-danger text-bold text-lg">*</span></label>
+                      <select ng-model="mainForm.box_status_id.value" class="form-control" ng-options="v.id as v.item_name for v in arrBoxStatus">
+                      </select>
+                      <span class="text-danger" ng-if="mainForm.box_status_id.error">Please enter valid New Box Status</span>
+                    </div>
+                    <!--<div class="form-group col-md-12" ng-if="mainForm.box_status_id.value==39">-->
+                    <!--  <label class="control-label">Review Priority <span class="text-danger text-bold text-lg">*</span></label>-->
+                    <!--  <select ng-model="mainForm.review_priority.value" class="form-control" ng-options="v as v for v in [1, 2, 3]">-->
+                    <!--  </select>-->
+                    <!--  <span class="text-danger" ng-if="mainForm.review_priority.error">Please enter valid Review Priority</span>-->
+                    <!--</div>-->
+                    <div class="form-group col-md-12" ng-if="mainForm.box_status_id.value == 33 || mainForm.box_status_id.value == 34">
+                      <label class="control-label">Custom Box Status <span class="text-danger text-bold text-lg">*</span></label>
+                      <input type="text" class="form-control" ng-model="mainForm.box_status_free_text.value" />
+                      <span class="text-danger" ng-if="mainForm.box_status_free_text.error">Please enter valid Custom Box Status</span>
+                    </div>
+                    <div class="form-group pull-right" ng-if="mainForm.id.value">
+                      <button class="btn btn-primary" ng-click="onSubmitAsYesterdayMainForm()">Same as Yesterday</button>
+                      <button class="btn btn-default" ng-click="onClearMainForm()">Cancel</button>
+                      <button class="btn btn-primary" ng-click="onSubmitMainForm()">Save</button>
+                    </div>
+                    <!-- <div class="form-group" ng-if="mainForm.id.value">
+                      <button class="btn btn-warning" ng-click="onSubmitMarkReviewManagement()">Mark for Review Mgmt.</button>
+                    </div> -->
+                  </div>
+                  <div class="col-md-5">
+                    <h4>Details of Selected Box</h4>
+                    <div style="height: 400px; overflow: auto;">
+                      <table class="table table-hover table-bordered table-striped">
+                        <tbody>
+                          <tr>
+                              <td>
+                                  Invoice Number
+                              </td>
+                              <td>
+                                  <b>{{boxDetails.trackingDetails.invoice_number}}</b>
+                              </td>
+                              <td>
+                                  Tracking Number
+                              </td>
+                              <td>
+                                  <b>{{boxDetails.trackingDetails.tracking_number}}</b>
+                              </td>
+                          </tr>
+                          <tr>
+                              <td colspan="2">
+                                  Box Details (L x W x H) = CBM
+                              </td>
+                              <td colspan="2">
+                                  <b>{{boxDetails.trackingDetails.box_length}} x
+                                  {{boxDetails.trackingDetails.box_breadth}} x
+                                  {{boxDetails.trackingDetails.box_height}} =
+                                  {{boxDetails.trackingDetails.cbm}}</b>
+                              </td>
+                          </tr>
+                          <tr>
+                              <td colspan="4">
+                                  Forwarder Name: 
+                                  <b>{{boxDetails.trackingDetails.forwarder_name}}</b>
+                              </td>
+                          </tr>
+                          <tr>
+                              <td colspan="4">
+                                  Sales Agent Name: 
+                                  <b>{{boxDetails.trackingDetails.sales_agent_name}}</b>
+                              </td>
+                          </tr>
+                          <tr>
+                              <td colspan="4">
+                                  Consignee Details <br />
+                                  <b>{{boxDetails.trackingDetails.consignee_name}}<br />
+                                  {{boxDetails.trackingDetails.consignee_phone_number}}<br />
+                                  {{boxDetails.trackingDetails.consignee_address}}<br /></b>
+                              </td>
+                          </tr>
+                          <tr>
+                              <td colspan="4">
+                                  Shipper Details <br />
+                                  <b>{{boxDetails.trackingDetails.supplier_name}}<br />
+                                  {{boxDetails.trackingDetails.supplier_phone_number}}<br />
+                                  {{boxDetails.trackingDetails.supplier_address}}<br /></b>
+                              </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <table class="table table-hover table-bordered table-striped">
+                          <tr>
+                              <td colspan="3">
+                                  <h4>Box Status</h4>
+                              </td>
+                          </tr>
+                          <tr ng-repeat="(k, v) in boxDetails.boxStatusDetails">
+                              <td>
+                                  <div>{{v.box_status_name}}</div>
+                                  <div><small>{{v.box_status_free_text}}</small></div>
+                              </td>
+                              <td>{{v.box_status_date | momentFltr:'YYYY-MM-DD': 'DD-MM-YYYY'}}</td>
+                              <td>{{boxDetails.boxStatusDetails[k-1].box_status_date && v.box_status_date ? (boxDetails.boxStatusDetails[k-1].box_status_date | diffDates: v.box_status_date) + ' days' : ''}}</td>
+                          </tr>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /column -->
+</div>
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<!-- /hbox layout -->
+

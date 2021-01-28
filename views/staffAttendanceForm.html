@@ -1,0 +1,88 @@
+<!-- hbox layout -->
+<div>
+    <ul class="nav nav-tabs ng-scope" style="">
+        <li class="active">
+            <a ui-sref="app.staffAttendance.form">
+              New Attendance
+            </a>
+        </li>
+        <li>
+            <a ui-sref="app.staffAttendance.monthlyReport">
+              Attendance Monthly Report
+            </a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active">
+            <div class="hbox hbox-auto-xs bg-light" ng-controller="staffAttendanceFormController">
+                <div class="col-md-12 section-border bg-white" style="padding: 20px 28px;">
+                    <div class="col-md-3">
+                        <label class="control-label">Attendance Date</label>
+                        <div class="input-group w-sm">
+                            <input type="text" class="form-control" datepicker-popup="{{formats}}" ng-model="mainForm.attendance_date.value" is-open="opened" max-date={{maxDate}} readonly="true" datepicker-options="dateOptions" ng-required="true" close-text="Close" />
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="openAttendance($event)" style="margin: 0; margin-left: -1px; height: 34px;"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <br />
+                        <button class="btn btn-primary" ng-click="onClickFetchAttendance()">Fetch Attendance</button>
+                    </div>
+                    <div class="clearfix"></div>
+                    <br />
+                    <div class="col-md-12">
+                        <div class="col-md-6">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped table-hover nowrap">
+                                    <thead>
+                                        <tr ng-if="arrStaffAttendance.length">
+                                            <th class="text-center text-danger" colspan="4">Attendance For: {{arrStaffAttendance[0].attendance_date | momentFltr:'YYYY-MM-DD': 'DD-MM-YYYY'}}</th>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-center" style="background-color: #fff">Staff Name</th>
+                                            <th class="text-center" style="background-color: #fff">Attended?</th>
+                                            <th class="text-center" style="background-color: #fff">Day Off?</th>
+                                            <th class="text-center" style="background-color: #fff">Rewards (in KD)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="v in arrStaffAttendance">
+                                            <td class="text-centers">{{v.staff_full_name}}</td>
+                                            <td class="text-centers">
+                                                <label class="i-switch m-t-xs m-r">
+                                                    <input type="checkbox" checked="" ng-model="v.staff_attendance">
+                                                    <i></i>
+                                                </label>
+                                            </td>
+                                            <td class="text-centers">
+                                                <label class="i-switch m-t-xs m-r">
+                                                    <input type="checkbox" checked="" ng-change="onChangeDayOff(v)" ng-model="v.day_off">
+                                                    <i></i>
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <input type="text" ng-model="v.rewards" class="form-control text-right" />
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <button class="btn btn-primary" ng-click="onClickSubmit()">Submitting for {{arrStaffAttendance[0].attendance_date | momentFltr:'YYYY-MM-DD': 'DD-MM-YYYY'}}</button>
+                        <!--<button class="btn btn-primary" ng-click="onClickSubmit()">Submit</button>-->
+                    </div>
+                </div>
+            </div>
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <!-- /hbox layout -->
+        </div>
+    </div>
+</div>

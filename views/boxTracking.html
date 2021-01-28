@@ -1,0 +1,332 @@
+<!-- hbox layout -->
+<div class="hbox hbox-auto-xs bg-light" ng-controller="boxTrackingController">
+  <div class="col-md-12 section-border bg-white" style="padding: 20px 28px;">
+    <div class="panel panel-default">
+      <!-- <div class="panel-heading font-bold">
+        Filters 
+      </div> -->
+      <div class="panel-body">
+        <div class="form-group clearfix" ng-show="is_exapanded || true">
+          <div class="row form-group">
+            <div class="col-md-4">
+              <form name="uploadForm">
+                <input type="file" ngf-select ng-model="import_this" name="import_this" style="display: inline-block;" ngf-accept="'.xlsx'" accept=".xlsx" />
+                <button type="submit" class="btn btn-sm btn-primary" ng-click="uploadThisExcel()">Import</button>
+              </form>
+              <b><small>The server supports upto 400 data at a single import</small></b>
+              <a href="import_formats/BoxTrackingImportFormat.xlsx" target="_blank" download class="btn btn-success">Download Excel Format</a>
+            </div>
+            <div class="col-md-4">
+              <form name="uploadFormStatus">
+                <input type="file" ngf-select ng-model="import_this_status" name="import_this_status" style="display: inline-block;" ngf-accept="'.xlsx'" accept=".xlsx" />
+                <button type="submit" class="btn btn-sm btn-primary" ng-click="uploadThisExcelStatus()">Import Status</button>
+              </form>
+              <b><small>The server supports upto 400 data at a single import</small></b>
+              <div class="bg-danger">
+                Failed: <span ng-repeat="v in upload_status_msgs.failed track by $index">{{ v }}, </span> 
+              </div>
+              <div class="bg-warning">
+                Not Found: <span ng-repeat="v in upload_status_msgs.not_found track by $index">{{ v }}, </span> 
+              </div>
+              <div class="bg-success">
+                Success: <span ng-repeat="v in upload_status_msgs.found track by $index">{{ v }}, </span> 
+              </div>
+            </div>
+            <div class="col-md-4">
+              <form name="uploadFormMapBoxTracking">
+                <input type="file" ngf-select ng-model="import_this_map_box_tracking" name="import_this_map_box_tracking" style="display: inline-block;" ngf-accept="'.xlsx'" accept=".xlsx" />
+                <button type="submit" class="btn btn-sm btn-primary" ng-click="uploadThisExcelMapBoxTracking()">Import Invoice - Tracking Number</button>
+              </form>
+              <b><small>The server supports upto 400 data at a single import</small></b>
+              <div class="bg-danger">
+                Failed: <span ng-repeat="v in upload_map_box_tracking_msgs.failed track by $index">{{ v }}, </span> 
+              </div>
+              <div class="bg-warning">
+                Not Found: <span ng-repeat="v in upload_map_box_tracking_msgs.not_found track by $index">{{ v }}, </span> 
+              </div>
+              <div class="bg-success">
+                Success: <span ng-repeat="v in upload_map_box_tracking_msgs.found track by $index">{{ v }}, </span> 
+              </div>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+          <!--<div class="form-group col-md-12">-->
+          <!--  <div class="row">-->
+          <!--    <div class="col-md-3" ng-repeat="v in checkboxesFirms">-->
+          <!--      <div class="checkbox">-->
+          <!--        <label class="i-checks">-->
+          <!--          <input type="checkbox" ng-model="v.btSelected"><i></i> {{ v.item_name }}-->
+          <!--        </label>-->
+          <!--      </div>-->
+          <!--    </div>-->
+          <!--  </div>-->
+          <!--</div>-->
+          <!--<div class="form-group col-md-12">-->
+          <!--  <div class="col-md-3">-->
+          <!--    <label class="control-label">Pick up date</label>-->
+          <!--    <input ui-jq="daterangepicker" ng-model="filters.pick_up_date" ui-options="{{ dateRangePickerOptions }}" class="form-control w-md" />-->
+          <!--  </div>-->
+          <!--  <div class="col-md-3">-->
+          <!--    <label class="control-label">Loaded date</label>-->
+          <!--    <input ui-jq="daterangepicker" ng-model="filters.loaded_date" ui-options="{{ dateRangePickerOptions }}" class="form-control w-md" />-->
+          <!--  </div>-->
+          <!--  <div class="col-md-3">-->
+          <!--    <label class="control-label">Cont. Dest. Arrival date</label>-->
+          <!--    <input ui-jq="daterangepicker" ng-model="filters.container_destination_arrival_date" ui-options="{{ dateRangePickerOptions }}" class="form-control w-md" />-->
+          <!--  </div>-->
+          <!--  <div class="col-md-3">-->
+          <!--    <label class="control-label">Paid Status</label>-->
+          <!--    <select ng-model="filters.paid_status" class="form-control" ng-options="v.id as v.item_name for v in [{id: 'PAID', item_name: 'Paid'}, {id: 'PENDING', item_name: 'Pending'}]" ng-class="{ 'b-danger': v.user_role_id.error }">-->
+          <!--      <option value="">- Select an Option -</option>-->
+          <!--    </select>-->
+          <!--  </div>-->
+          <!--</div>-->
+        <!--  <div class="form-group col-md-12">-->
+        <!--    <div class="col-md-3">-->
+        <!--      <label class="control-label col-md-12 row">Port</label>-->
+        <!--      <select ng-model="filters.port_id" style="width: 100%" id="select_port" class="form-control" ng-options="v.id as v.item_name for v in dropdowns.arrPorts">-->
+        <!--        <option value="">-Select an Option</option>-->
+        <!--      </select>-->
+        <!--    </div>-->
+        <!--    <div class="col-md-3">-->
+        <!--      <label class="control-label">Forwarder</label>-->
+        <!--      <select ng-model="filters.forwarder_id" class="form-control" ng-options="v.id as v.item_name for v in dropdowns.arrForwarders">-->
+        <!--        <option value="">-Select an Option</option>-->
+        <!--      </select>-->
+        <!--    </div>-->
+        <!--    <div class="col-md-3">-->
+        <!--      <label class="control-label">Boxes in Warehouse</label>-->
+        <!--      <select ng-model="filters.boxes_in_warehouse" class="form-control" ng-options="v.id as v.text for v in dropdowns.arrBoxesInWarehouse">-->
+        <!--      </select>-->
+        <!--    </div>-->
+        <!--    <div class="col-md-3">-->
+        <!--      <label class="control-label">Is Box Descrapency</label>-->
+        <!--      <select ng-model="filters.is_box_descrapency" class="form-control" ng-options="v.id as v.text for v in dropdowns.arrIsBoxesDescrapency">-->
+        <!--      </select>-->
+        <!--    </div>-->
+        <!--  </div>-->
+        <!--  <div class="clearfix"></div>-->
+        <!--  <div class="form-group text-right col-md-12">-->
+        <!--    <button class="btn btn-sm btn-primary" ng-click="onClickFilterApply()">Apply</button>-->
+        <!--  </div>-->
+        <!--</div>-->
+        <!--<div class="form-group">-->
+        <!--  <div class="col-md-12">-->
+        <!--    <button class="pull-right btn btn-xs btn-warning" ng-show="is_exapanded" ng-click="is_exapanded=false">Collapse</button>-->
+        <!--    <button class="pull-right btn btn-xs btn-warning" ng-show="!is_exapanded" ng-click="is_exapanded=true">Expand</button>-->
+        <!--  </div>-->
+        <!--</div>-->
+      </div>
+    </div>
+    <div class="clearfix"></div>
+    <Br />
+    <!--<div class="col-md-12" style="height: 800px;">-->
+    <!--  <label class="control-label">Total CBM: {{ tableData | sumByKey: 'cbm' }}</label>-->
+    <!--  <label class="control-label">Total Qty: {{ tableData | sumByKey: 'quantity' }}</label>-->
+    <!--  <div class="table-responsives" id="bt_table_resp">-->
+    <!--    <table class="table table-bordered table-striped table-hover nowrap" id="bt_table">-->
+    <!--      <thead>-->
+    <!--        <tr>-->
+    <!--          <th style="background-color: #fff">Assign in Bulk</th>-->
+    <!--          <th style="background-color: #fff">Actions</th>-->
+    <!--          <th style="background-color: #fff">Pickup Date</th>-->
+    <!--          <th style="background-color: #fff">Invoice Number</th>-->
+    <!--          <th style="background-color: #fff">Tracking Number</th>-->
+    <!--          <th style="background-color: #fff">Loaded Date</th>-->
+    <!--          <th style="background-color: #fff">Container Number</th>-->
+    <!--          <th style="background-color: #fff">Forwarder</th>-->
+    <!--          <th style="background-color: #fff">Cont. Dest. Arrival Date</th>-->
+    <!--          <th style="background-color: #fff">Box Unique Number</th>-->
+    <!--          <th style="background-color: #fff">Quantity</th>-->
+    <!--          <th style="background-color: #fff">Box Status</th>-->
+    <!--          <th style="background-color: #fff">Box Length</th>-->
+    <!--          <th style="background-color: #fff">Box Width</th>-->
+    <!--          <th style="background-color: #fff">Box Height</th>-->
+    <!--          <th style="background-color: #fff">CBM</th>-->
+    <!--          <th style="background-color: #fff">Package Type</th>-->
+    <!--          <th style="background-color: #fff">Box Descrapency</th>-->
+    <!--          <th style="background-color: #fff">Destination</th>-->
+    <!--          <th style="background-color: #fff">Port</th>-->
+    <!--          <th style="background-color: #fff">Consignee Name</th>-->
+    <!--          <th style="background-color: #fff">Consignee Phone Number</th>-->
+    <!--          <th style="background-color: #fff">Consignee Address</th>-->
+    <!--          <th style="background-color: #fff">Shipper Name</th>-->
+    <!--          <th style="background-color: #fff">Shipper Phone Number</th>-->
+    <!--          <th style="background-color: #fff">Shipper Address</th>-->
+    <!--          <th style="background-color: #fff">Sales Agent</th>-->
+    <!--          <th style="background-color: #fff">Driver</th>-->
+    <!--          <th style="background-color: #fff">Cash Amount</th>-->
+    <!--          <th style="background-color: #fff">Credit Amount</th>-->
+    <!--          <th style="background-color: #fff">Total Amount</th>-->
+    <!--          <th style="background-color: #fff">Notes</th>-->
+    <!--        </tr>-->
+    <!--      </thead>-->
+    <!--      <tbody>-->
+    <!--        <tr ng-repeat="v in tableData" data-refpid="{{v.id}}">-->
+    <!--          <td>-->
+    <!--            <button class="btn btn-xs btn-primary" ng-click="onClickAddBulk($index, v)"><i class="fa fa-plus"></i></button>-->
+    <!--          </td>-->
+    <!--          <td>-->
+    <!--            <a class="btn btn-warning btn-xs" ui-sref="app.newBoxTracking({t: 'u', id: v.invoice_number})">-->
+    <!--              <i class="fa fa-pencil"></i>-->
+    <!--            </a>-->
+                <!-- <button class="btn btn-danger btn-xs" ng-click="deleteThisItem($index, v)"><i class="fa fa-times"></i></button> -->
+    <!--          </td>-->
+    <!--          <td>{{ v.pick_up_date | momentFltr:'YYYY-MM-DD':'DD-MM-YYYY' }}</td>-->
+    <!--          <td>{{ v.invoice_number }}</td>-->
+    <!--          <td>{{ v.tracking_number }}</td>-->
+    <!--          <td>{{ v.loaded_date | momentFltr:'YYYY-MM-DD':'DD-MM-YYYY' }}</td>-->
+    <!--          <td>{{ v.container_number }}</td>-->
+    <!--          <td>{{ v.forwarder_data.name }}</td>-->
+    <!--          <td>{{ v.container_destination_arrival_date | momentFltr:'YYYY-MM-DD':'DD-MM-YYYY' }}</td>-->
+    <!--          <td>{{ v.box_unique_number }}</td>-->
+    <!--          <td>{{ v.quantity }}</td>-->
+    <!--          <td>{{ v.box_status_data.name }}</td>-->
+    <!--          <td>{{ v.box_length }}</td>-->
+    <!--          <td>{{ v.box_breadth }}</td>-->
+    <!--          <td>{{ v.box_height }}</td>-->
+    <!--          <td>{{ v.cbm }}</td>-->
+    <!--          <td>{{ v.package_type_data.name }}</td>-->
+    <!--          <td>{{ v.is_box_descrapency }}</td>-->
+    <!--          <td>{{ v.destination_data.name }}</td>-->
+    <!--          <td>{{ v.port_data.name }}</td>-->
+    <!--          <td>{{ v.consignee_name }}</td>-->
+    <!--          <td>{{ v.consignee_phone_number }}</td>-->
+    <!--          <td>{{ v.consignee_address }}</td>-->
+    <!--          <td>{{ v.supplier_name }}</td>-->
+    <!--          <td>{{ v.supplier_phone_number }}</td>-->
+    <!--          <td>{{ v.supplier_address }}</td>-->
+    <!--          <td>{{ v.sales_agent_data.name }}</td>-->
+    <!--          <td>{{ v.driver_data.name }}</td>-->
+    <!--          <td class="text-right">{{ v.cash_amount }}</td>-->
+    <!--          <td class="text-right">{{ v.credit_amount }}</td>-->
+    <!--          <td class="text-right">{{ v.invoice_total_amount }}</td>-->
+    <!--          <td>{{ v.notes }}</td>-->
+    <!--        </tr>-->
+    <!--      </tbody>-->
+    <!--    </table>-->
+    <!--  </div>-->
+    <!--</div>-->
+    <!--<Br />-->
+    <!--<div class="col-md-12">-->
+    <!--  <div class="row form-group">-->
+    <!--    <h4>Selected Invoices & Boxes</h4>-->
+    <!--    <div class="table-responsive">-->
+    <!--      <table class="table table-bordered table-condensed">-->
+    <!--        <thead>-->
+    <!--          <tr>-->
+    <!--            <th>Actions</th>-->
+    <!--            <th>#</th>-->
+    <!--            <th>Invoice Number</th>-->
+    <!--            <th>Consignee Name</th>-->
+    <!--            <th>Package Type</th>-->
+    <!--            <th>CBM</th>-->
+    <!--          </tr>-->
+    <!--        </thead>-->
+    <!--        <tbody>-->
+    <!--          <tr ng-repeat="v in selectedRows" data-refid="{{v.id}}">-->
+    <!--            <td>-->
+    <!--              <button class="btn btn-xs btn-danger" ng-click="onClickRemoveBulk($index, v)"><i class="fa fa-times"></i></button>-->
+    <!--            </td>-->
+    <!--            <td>{{ $index + 1 }}</td>-->
+    <!--            <td>{{ v.invoice_number }}</td>-->
+    <!--            <td>{{ v.consignee_name }}</td>-->
+    <!--            <td>{{ v.package_type_data.name }}</td>-->
+    <!--            <td>{{ v.cbm }}</td>-->
+    <!--          </tr>-->
+    <!--        </tbody>-->
+    <!--      </table>-->
+    <!--    </div>-->
+    <!--  </div>-->
+    <!--  <div ng-show="selectedRows.length">-->
+    <!--    <div class="row form-group">-->
+    <!--      <div class="col-md-2">-->
+    <!--        <label class="form-label">Loaded Date <span class="text-danger text-bold text-lg" ng-if="bulkForm.loaded_date.validPattern.indexOf('required')>=0">*</span></label>-->
+    <!--        <div class="input-group w-sm">-->
+    <!--          <input -->
+    <!--            type="text" -->
+    <!--            class="form-control" -->
+    <!--            datepicker-popup="{{formats}}" -->
+    <!--            ng-model="bulkForm.loaded_date.value" -->
+    <!--            is-open="openedLoaded" -->
+    <!--            readonly="true" -->
+    <!--            datepicker-options="dateOptions" -->
+    <!--            ng-required="true" -->
+    <!--            close-text="Close" />-->
+    <!--          <span class="input-group-btn">-->
+    <!--            <button type="button" class="btn btn-default" ng-click="openLoaded($event)" style="margin: 0; margin-left: -1px; height: 34px;"><i class="glyphicon glyphicon-calendar"></i></button>-->
+    <!--          </span>-->
+    <!--        </div>-->
+    <!--        <span class="text-danger" ng-if="bulkForm.loaded_date.error">Please enter valid Loaded Date</span>-->
+    <!--      </div>-->
+    <!--      <div class="col-md-2">-->
+    <!--        <label class="form-label">Container Number <span class="text-danger text-bold text-lg" ng-if="bulkForm.container_number.validPattern.indexOf('required')>=0">*</span></label>-->
+    <!--        <input -->
+    <!--          type="text" -->
+    <!--          class="form-control" -->
+    <!--          required -->
+    <!--          placeholder=""-->
+    <!--          ng-model="bulkForm.container_number.value"-->
+    <!--          ng-class="{ 'b-danger': bulkForm.container_number.error }" />-->
+    <!--        <span class="text-danger" ng-if="bulkForm.container_number.error">Please enter valid Container Number</span>-->
+    <!--      </div>-->
+    <!--      <div class="col-md-2">-->
+    <!--        <label class="form-label">Forwarder <span class="text-danger text-bold text-lg" ng-if="bulkForm.forwarder_id.validPattern.indexOf('required')>=0">*</span></label>-->
+    <!--        <select ng-model="bulkForm.forwarder_id.value" required class="form-control" ng-options="vv.id as vv.item_name for vv in dropdowns.arrForwarders" ng-class="{ 'b-danger': bulkForm.forwarder_id.error }" ng-change="onChangeForwarder(v)">-->
+    <!--          <option value="">-Select an Option</option>-->
+    <!--        </select>-->
+    <!--        <span class="text-danger" ng-if="bulkForm.forwarder_id.error">Please enter valid Forwarder</span>-->
+    <!--      </div>-->
+    <!--      <div class="col-md-2">-->
+    <!--        <label class="form-label">Cont. Dest. Arrival Date <span class="text-danger text-bold text-lg" ng-if="bulkForm.container_destination_arrival_date.validPattern.indexOf('required')>=0">*</span></label>-->
+    <!--        <div class="input-group w-sm">-->
+    <!--          <input -->
+    <!--            type="text" -->
+    <!--            class="form-control" -->
+    <!--            datepicker-popup="{{formats}}" -->
+    <!--            ng-model="bulkForm.container_destination_arrival_date.value" -->
+    <!--            is-open="openedDestArrival" -->
+    <!--            readonly="true" -->
+    <!--            datepicker-options="dateOptions" -->
+    <!--            ng-required="true" -->
+    <!--            close-text="Close" />-->
+    <!--          <span class="input-group-btn">-->
+    <!--            <button type="button" class="btn btn-default" ng-click="openDestArrival($event)" style="margin: 0; margin-left: -1px; height: 34px;">-->
+    <!--              <i class="glyphicon glyphicon-calendar"></i>-->
+    <!--            </button>-->
+    <!--          </span>-->
+    <!--        </div>-->
+    <!--        <span class="text-danger" ng-if="bulkForm.container_destination_arrival_date.error">Please enter valid Container Destination Arrival Date</span>-->
+    <!--      </div>-->
+    <!--    </div>-->
+    <!--    <div class="row form-group">-->
+    <!--      <div class="col-md-3">-->
+    <!--        <label class="form-label"> Select a Destination <span class="text-danger text-bold text-lg" ng-if="bulkForm.destination_id.validPattern.indexOf('required')>=0">*</span></label>-->
+    <!--        <select ng-model="bulkForm.destination_id.value" id="select_destination" required class="form-control" ng-options="v.id as v.item_name for v in dropdowns.arrDestinations" ng-class="{ 'b-danger': bulkForm.destination_id.error }" ng-change="onChangeDestination()">-->
+    <!--          <option value="">-Select an Option</option>-->
+    <!--        </select>-->
+    <!--        <span class="text-danger" ng-if="bulkForm.destination_id.error">Please select a valid Destination</span>-->
+    <!--      </div>-->
+    <!--      <div class="col-md-3">-->
+    <!--        <label class="form-label"> Select a Port <span class="text-danger text-bold text-lg" ng-if="bulkForm.port_id.validPattern.indexOf('required')>=0">*</span></label>-->
+    <!--        <select ng-model="bulkForm.port_id.value" id="select_port" required class="form-control" ng-options="v.id as v.item_name for v in dropdowns.arrPorts" ng-class="{ 'b-danger': bulkForm.port_id.error }" ng-change="onChangePort()">-->
+    <!--          <option value="">-Select an Option</option>-->
+    <!--        </select>-->
+    <!--        <span class="text-danger" ng-if="bulkForm.port_id.error">Please select a valid Port</span>-->
+    <!--      </div>-->
+    <!--      <div class="col-md-3">-->
+    <!--        <br />-->
+    <!--        <button class="btn btn-primary" ng-click="onSubmitBulkForm()">Save</button>-->
+    <!--      </div>-->
+    <!--    </div>-->
+    <!--  </div>-->
+    <!--</div>-->
+  </div>
+</div>
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<!-- /hbox layout -->

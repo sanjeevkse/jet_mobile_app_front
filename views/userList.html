@@ -1,0 +1,114 @@
+<!-- hbox layout -->
+<div>
+    <ul class="nav nav-tabs ng-scope" style="">
+        <li class="">
+            <a ui-sref="app.user.userForm({userId: stateParams.userId})">Add/Edit</a>
+        </li>
+        <li class="active">
+            <a ui-sref="app.user.userList">List</a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active">
+            <div class="hbox hbox-auto-xs" ng-controller="userListController">
+                <div class="col-md-12">
+                  <div class="panel panel-default">
+                    <div class="panel-body">
+                      <div class="form-group clearfix">
+                          <div class="table-responsives">
+                            <table class="table table-bordered" id="userTable">
+                              <thead>
+                                <tr>
+                                  <th>Actions</th>
+                                  <th>Full Name</th>
+                                  <th>User Code</th>
+                                  <th>Employee Number</th>
+                                  <th>Username</th>
+                                  <th>Password</th>
+                                  <th>User Role</th>
+                                  <th>Nationality</th>
+                                  <th>Joining Date</th>
+                                  <th>Staff Actually Salary</th>
+                                  <th>Residential Company</th>
+                                  <th>Working Company</th>
+                                  <th>Passport Number</th>
+                                  <th>Passport Exp. Date</th>
+                                  <th>Civil Number</th>
+                                  <th>Civil Exp. Date</th>
+                                  <th>Driving License Number</th>
+                                  <th>Driving License Exp. Date</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr ng-repeat="v in usersData">
+                                  <td>
+                                    <a class="btn btn-warning btn-xs" ui-sref="app.user.userForm({personId: v.id})" ng-if="v.status == 1"><i class="fa fa-pencil"></i> Edit</a> 
+                                    <a class="btn btn-danger btn-xs" ng-click="onClickDeactivate(v)" ng-if="v.status == 1"><i class="fa fa-remove"></i> Deactivate</a> 
+                                  </td>
+                                  <td>{{ v.user_code }}</td>
+                                  <td>{{ v.full_name }}</td>
+                                  <td>{{ v.employee_number }}</td>
+                                  <td>{{ v.username }}</td>
+                                  <td>{{ v.password }}</td>
+                                  <td>{{ v.user_role_data.name }}</td>
+                                  <td>{{ v.nationality }}</td>
+                                  <td>{{ v.joining_date | momentFltr: 'YYYY-MM-DD': 'DD-MM-YYYY' }}</td>
+                                  <td>{{ v.staff_actually_salary }}</td>
+                                  <td>{{ v.residential_company }}</td>
+                                  <td>{{ v.working_company }}</td>
+                                  <td>{{ v.passport_number }}</td>
+                                  <td>{{ v.passport_expiry_date | momentFltr: 'YYYY-MM-DD': 'DD-MM-YYYY' }}</td>
+                                  <td>{{ v.civil_number }}</td>
+                                  <td>{{ v.civil_expiry_date | momentFltr: 'YYYY-MM-DD': 'DD-MM-YYYY' }}</td>
+                                  <td>{{ v.driving_license_number }}</td>
+                                  <td>{{ v.driving_license_expiry_date | momentFltr: 'YYYY-MM-DD': 'DD-MM-YYYY' }}</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                            </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+  <script type="text/ng-template" id="userDeactivateModal.html">
+    <div>
+        <div class="modal-header">
+            <h3 class="modal-title">Confirm User Deactivation</h3>
+        </div>
+        <div class="modal-body">
+            <div class="col-md-12">
+                
+                <div class="col-md-4">
+                    <label class="control-label">Date of Deactivation</label>
+                    <div class="input-group w-sm">
+                        <input 
+                            type="text" 
+                            class="form-control" 
+                            datepicker-popup="{{formats}}" 
+                            ng-model="mainForm.deactivation_date.value" 
+                            is-open="opened" 
+                            readonly="true" 
+                            datepicker-options="dateOptions" 
+                            ng-required="true" 
+                            close-text="Close" />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="openDateOfDeactivation($event)" style="margin: 0; margin-left: -1px; height: 34px;"><i class="glyphicon glyphicon-calendar"></i></button>
+                        </span>
+                    </div>
+                    <span class="text-danger" ng-if="mainForm.deactivation_date.error">Please enter valid Date of Activation</span>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="modal-footer">                  
+            <button class="btn btn-default" ng-click="closeModal()">Close</button>
+            <button class="btn btn-primary" ng-click="confirmDeactivation()">Confirm</button>
+        </div>
+    </div>
+  </script>
+</div>

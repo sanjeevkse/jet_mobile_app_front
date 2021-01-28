@@ -1,0 +1,97 @@
+<!-- hbox layout -->
+
+<div class="hbox hbox-auto-xs bg-light" ng-controller="sLFListController">
+  <div class="col-md-12 section-border bg-white" style="padding: 20px 28px;">    
+    <div class="col-md-12">
+      <div class="form-group">
+        <!-- <div class="col-md-3">
+          <label class="control-label">Forwarder</label>
+          <select ng-model="filters.forwarder_id" class="form-control" ng-options="v.id as v.item_name for v in dropdowns.arrForwarders">
+            <option value="">-Select an Option</option>
+          </select>
+        </div> -->
+        <!-- <div class="col-md-3">
+          <label class="control-label">Shipping Line</label>
+          <select ng-model="filters.shipping_line_name" class="form-control" ng-options="v.id as v.item_name for v in dropdowns.arrShippingLines">
+            <option value="">-Select an Option</option>
+          </select>
+        </div> -->
+        <div class="col-md-3">
+          <label class="control-label">Paid Status</label>
+          <select ng-model="filters.paid_status" class="form-control" ng-options="v.id as v.item_name for v in [{id: 'PAID', item_name: 'Paid'}, {id: 'PENDING', item_name: 'Pending'}]" ng-class="{ 'b-danger': v.user_role_id.error }">
+            <option value="">- Select an Option -</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <br />
+          <button class="btn btn-sm btn-primary" ng-click="onClickFilterApply()">Apply</button>
+        </div>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+    <br />
+    <div class="col-md-12" style="height: 800px;">
+      <div class="table-responsive" id="bt_table_slf">
+        <table class="table table-bordered table-striped table-hover nowrap" id="slf_table">
+          <thead>
+            <tr>
+              <th class="text-center" style="background-color: #fff">Container Number</th>
+              <th class="text-center" style="background-color: #fff">Billing Number</th>
+              <th class="text-center" style="background-color: #fff">Forwarder Name</th>
+              <th class="text-center" style="background-color: #fff">Forwarder Amount</th>
+              <th class="text-center" style="background-color: #fff">Shipping Line Name</th>
+              <th class="text-center" style="background-color: #fff">Shipping Line Amount</th>
+              <th class="text-center" style="background-color: #fff">Releasing Company</th>
+              <th class="text-center" style="background-color: #fff">Releasing Company Amount</th>
+              <th class="text-center" style="background-color: #fff">Location</th>
+              <th class="text-center" style="background-color: #fff">Loaded Date</th>
+              <th class="text-center" style="background-color: #fff">ETA</th>
+              <th class="text-center" style="background-color: #fff">Duraction (in days)</th>
+              <th class="text-center" style="background-color: #fff">Manifest</th>
+              <th class="text-center" style="background-color: #fff">Telex</th>
+              <th class="text-center" style="background-color: #fff">Release Status</th>
+              <th class="text-center" style="background-color: #fff">Invoice Amount</th>
+              <th class="text-center" style="background-color: #fff">Currency</th>
+              <th class="text-center" style="background-color: #fff">Uploaded Files</th>
+              <th class="text-center" style="background-color: #fff">Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="v in tableData" data-refpid="{{v.id}}">
+              <td>{{ v.container_number }}</td>
+              <td>{{ v.billing_number }}</td>
+              <td>{{ v.forwarder_data.name }}</td>
+              <td>{{ v.forwarder_amount }}</td>
+              <td>{{ v.shipping_line_name }}</td>
+              <td class="text-right">{{ v.shipping_line_amount }}</td>
+              <td>{{ v.releasing_company }}</td>
+              <td class="text-right">{{ v.releasing_company_amount }}</td>
+              <td>{{ v.destination_data.name }}</td>
+              <td>{{ v.loaded_date | momentFltr:'YYYY-MM-DD':'DD-MM-YYYY' }}</td>
+              <td>{{ v.estimated_arrival_date | momentFltr:'YYYY-MM-DD':'DD-MM-YYYY' }}</td>
+              <td>{{ v.duration }}</td>
+              <td>{{ v.manifest }}</td>
+              <td>{{ v.telex }}</td>
+              <td>{{ v.release_status }}</td>
+              <td class="text-right">{{ v.invoice_amount }}</td>
+              <td class="text-right">{{ v.invoice_currency }}</td>
+              <td>
+                <div ng-if="v.file_path_json[0].length">
+                  <a href="{{vv}}" target="_blank" class="btn btn-xs btn-warning" ng-repeat="vv in v.file_path_json">View {{$index + 1}}</a>
+                </div>
+              </td>
+              <td>{{ v.notes }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<!-- /hbox layout -->

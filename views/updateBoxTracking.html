@@ -1,0 +1,136 @@
+<!-- hbox layout -->
+<div class="hbox hbox-auto-xs bg-light" ng-controller="updateBoxTrackingController">
+  <!-- column -->
+  <div class="col">
+    <div class="vbox">
+      <div class="row-row">
+        <div class="wrapper">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="panel panel-default">
+                <div class="panel-body">
+                  <div class="col-md-3">
+                    <h4>Pending tracking numbers and image uploads</h4>
+                    <input type="text" class="form-control" ng-model="searchText" placeholder="Search by invoice number, tracking number" style="margin-bottom: 10px;" />
+                    <div style="height: 400px; overflow: auto;">
+                      <table class="table table-hover table-bordered table-striped">
+                        <tbody>
+                          <tr ng-repeat="v in arrNotToday | filter: searchText" ng-click="onClickPendingTask(v)">
+                            <td>
+                              <div>
+                                <div>Box Unique Number: {{v.invoice_number}}/{{v.box_unique_number}}</div>
+                                <div>Tracking: {{v.tracking_number}}</div>
+                                <div>Invoice: {{v.invoice_number}}</div>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <h4>Box Status Updating (Box Unique Number: {{mainForm.invoice_number.value +'/'+boxDetails.trackingDetails.box_unique_number}})</h4>
+                    <div class="form-group col-md-12">
+                      <label class="control-label">Invoice Number <span class="text-danger text-bold text-lg">*</span></label>
+                      <input type="text" class="form-control" ng-model="mainForm.invoice_number.value" disabled="" />
+                      <span class="text-danger" ng-if="mainForm.invoice_number.error">Please enter valid Invoice Number</span>
+                    </div>
+                    <div class="form-group col-md-12">
+                      <label class="control-label">Box Tracking Number</label>
+                      <input type="text" class="form-control" ng-model="mainForm.tracking_number.value" />
+                      <span class="text-danger" ng-if="mainForm.tracking_number.error">Please enter valid Box Tracking Number</span>
+                    </div>
+                    <div class="form-group col-md-12">
+                      <label class="control-label">Upload File</label>
+                    <div>
+                      <input type="file" ngf-select ng-model="mainForm.upload_file.value" name="upload_file" style="display: inline-block;" ngf-accept="'image/*'" accept="image/*" ngf-multiple="true" />
+                    </div>
+                    <b><small>Supported files: jpg, jpeg, png</small></b>
+                    </div>
+                    <div class="form-group pull-right">
+                      <button class="btn btn-default" ng-click="onClearMainForm()">Cancel</button>
+                      <button class="btn btn-primary" ng-click="onSubmitMainForm()">Save</button>
+                    </div>
+                  </div>
+                  <div class="col-md-5">
+                    <h4>Details of Selected Box</h4>
+                  <table class="table table-hover table-bordered table-striped">
+                    <tbody>
+                      <tr>
+                          <td>
+                              Invoice Number
+                          </td>
+                          <td>
+                              <b>{{boxDetails.trackingDetails.invoice_number}}</b>
+                          </td>
+                          <td>
+                              Tracking Number
+                          </td>
+                          <td>
+                              <b>{{boxDetails.trackingDetails.tracking_number}}</b>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td colspan="2">
+                              Box Details (L x W x H) = CBM
+                          </td>
+                          <td colspan="2">
+                              <b>{{boxDetails.trackingDetails.box_length}} x
+                              {{boxDetails.trackingDetails.box_breadth}} x
+                              {{boxDetails.trackingDetails.box_height}} =
+                              {{boxDetails.trackingDetails.cbm}}</b>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td colspan="4">
+                              Consignee Details <br />
+                              <b>{{boxDetails.trackingDetails.consignee_name}}<br />
+                              {{boxDetails.trackingDetails.consignee_phone_number}}<br />
+                              {{boxDetails.trackingDetails.consignee_address}}<br /></b>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td colspan="4">
+                              Shipper Details <br />
+                              <b>{{boxDetails.trackingDetails.supplier_name}}<br />
+                              {{boxDetails.trackingDetails.supplier_phone_number}}<br />
+                              {{boxDetails.trackingDetails.supplier_address}}<br /></b>
+                          </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <table class="table table-hover table-bordered table-striped">
+                    <tbody>
+                      <tr>
+                          <td>
+                              Uploaded Images
+                          </td>
+                      </tr>
+                      <tr>
+                          <td>
+                              <div ng-repeat="v in boxDetails.trackingDetails.file_path_json.split(',,,,,')">
+                                 <span>{{'Image '+($index + 1)}}</span>
+                                 <button class="btn btn-warning btn-sm" ng-click="viewUploadedImage(v)">View</button>
+                              </div>
+                          </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /column -->
+</div>
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<!-- /hbox layout -->

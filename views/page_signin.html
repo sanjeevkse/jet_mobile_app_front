@@ -1,0 +1,29 @@
+<div id="bg-login-image" style="background-image: url('img/calendar-cup-depth-of-field-210660.jpg') !important; background-repeat: no-repeat !important; background-size: cover; height: 100vh; width: 100%; position: fixed; z-index: -1; margin-top: -50px;"></div>
+<div class="container w-xxl w-auto-xs" ng-controller="signinController" ng-init="app.settings.container = false;" style="background: rgba(255,255,255,0.6); padding: 40px; border-radius: 10px;">
+  <!-- <p class="navbar-brand block m-t" style="white-space: nowrap;">Paujin</p> -->
+  <div class="m-b-lg">
+    <div class="wrapper text-center">
+      <strong></strong>
+      <img src="img/logo.jpg" alt="." class="hides" width="100%" />
+    </div>
+    <form name="form" class="form-validation" novalidate ng-submit="OnClickLogIn()">
+      <div class="text-danger wrapper text-center" ng-show="userForm.errorMsg">
+          {{ userForm.errorMsg }}
+      </div>
+      <div class="list-group list-group-sm">
+        <div class="list-group-item">
+          <input type="text" placeholder="Username" class="form-control no-border no-outline no-focus-border" ng-model="userForm.username" required>
+        </div>
+        <div class="list-group-item">
+           <input type="password" placeholder="Password" class="form-control no-border no-outline no-focus-border" ng-model="userForm.password" required>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-lg btn-primary btn-block" ng-disabled='form.$invalid'>Log in</button>
+      <!-- <div class="text-center m-t m-b"><a ui-sref="access.forgotpwd">Forgot password?</a></div>
+      <div class="line line-dashed"></div> -->
+    </form>
+  </div>
+  <div class="text-center" ng-include="'views/blocks/page_footer.html'">
+    {% include 'blocks/page_footer.html' %}
+  </div>
+</div>

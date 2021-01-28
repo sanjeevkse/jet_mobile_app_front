@@ -1,0 +1,95 @@
+<!-- hbox layout -->
+<div class="hbox hbox-auto-xs bg-light" ng-controller="staffPayrollController">
+  <!-- column -->
+  <div class="col">
+    <div class="vbox">
+      <div class="row-row">
+        <div class="wrapper">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="panel panel-default">
+                <div class="panel-body">
+                  <div class="col-md-3">
+                    <h4>All Staffs </h4>
+                    <input type="text" class="form-control" ng-model="searchText" placeholder="Search by staff name" style="margin-bottom: 10px;" />
+                    <div style="height: 400px; overflow: auto;">
+                      <table class="table table-hover table-bordered table-stripeds">
+                        <tbody>
+                          <tr ng-repeat="v in arrStaffs | filter: searchText" ng-click="onClickStaff(v)">
+                            <td>
+                              <div>
+                                <div>{{v.full_name}}</div>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <div class="col-md-9">
+                    <h4>Staff Payroll Details</h4>
+                    <div class="row form-group">
+                        <div class="col-md-3">
+                            <label class="control-label">Month <span class="text-danger text-bold text-lg">*</span></label>
+                            <select ng-model="payrollSelections.month" ng-change="onChangeMonth()" class="form-control" ng-options="v.key as v.value for v in arrMonths">
+                                <option value="">-Select an Option</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="control-label">Year <span class="text-danger text-bold text-lg">*</span></label>
+                            <select ng-model="payrollSelections.year" ng-change="onChangeYear()" class="form-control" ng-options="v.key as v.value for v in arrYears">
+                                <option value="">-Select an Option</option>
+                            </select>
+                        </div>
+                    </div>
+                    <table class="table table-bordered">
+                        <tr>
+                            <td>Staff Full Name</td>
+                            <td><b>{{staffPayrollDetails.user_data.full_name}}</b></td>
+                            <td>Staff Employee Number</td>
+                            <td><b>{{staffPayrollDetails.user_data.employee_number}}</b></td>
+                        </tr>
+                        <tr>
+                            <td>Number of Days: <b>{{staffPayrollDetails.month_number_of_days}}</b></td>
+                            <td>[Working+Friday] Days: <b>{{staffPayrollDetails.payable_number_of_days}}</b></td>
+                            <td>Fridays: <b>{{staffPayrollDetails.friday_number_of_days}}</b></td>
+                            <td>Attendance: <b>{{staffPayrollDetails.attended_number_of_days}}</b></td>
+                        </tr>
+                        <tr>
+                            <td>Staff Salary: <b>KD {{staffPayrollDetails.staff_actual_salary}}</b></td>
+                            <td>Staff this month Salary: <b class="text-success text-lg">KD {{staffPayrollDetails.total_payable_salary}}</b></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </table>
+                    <table class="table table-bordered">
+                        <tr ng-repeat="v in staffPayrollDetails.heads_with_salary">
+                            <td>{{v.head_name}}</td>
+                            <td style="width: 30%;">
+                                <input type="text" class="form-control text-right" ng-model="v.head_amount" ng-change="onChangeHeadAmount()" />
+                            </td>
+                        </tr>
+                    </table>
+                    <hr />
+                    <div class="col-md-12 pull-right">
+                        <button class="btn btn-primary" ng-click="onSubmitStaffSalary()">Submit</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /column -->
+</div>
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<!-- /hbox layout -->
+

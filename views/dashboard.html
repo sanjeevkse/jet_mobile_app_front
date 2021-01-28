@@ -1,0 +1,149 @@
+<div class="wrapper-md" ng-controller="dashboardController">
+  <!-- stats -->
+  <div class="row">
+    <div class="col-md-12">
+      <div class="row row-sm text-center">
+        <div class="col-xs-4" ng-repeat="v in dContent | groupBy: 'firm.id'">
+          <div class="panel padder-v item {{ v[0].firm.primary_color_class }}">
+            <div class="h1 font-thin h1">{{ v[0].invoices | sumByKey: 'cbm' }}</div>
+            <span class="text-muted text-xs"><b>{{ v[0].firm.item_name }}</b> | This Month's CBM for today</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="rows">
+      <!-- <div class="col-md-6">
+        <div class="panel panel-default">
+          <div class="panel-heading font-bold">Boxes (in Warehouse)</div>
+          <div class="panel-body">
+            <div class="table-responsive" style="overflow-y: auto; height: 350px;">
+              <table class="table table-bordered" id="dashboard_descrapency_tables">
+                <thead>
+                  <th class="text-center">#</th>
+                  <th class="text-center">Invoice Number</th>
+                  <th class="text-center">Company</th>
+                  <th class="text-center">CBM</th>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="v in in_warehouse_boxes">
+                    <td class="text-right">{{ $index + 1 }}</td>
+                    <td class="text-rights">{{ v.invoice_number }}</td>
+                    <td>{{ v.firm_name }}</td>
+                    <td class="text-right">{{ v.cbm }}</td>
+                  </tr>
+                  <tr ng-if="!in_warehouse_boxes.length">
+                    <td colspan="4">No Data Available</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div> -->
+      <div class="col-md-6">
+        <div class="panel panel-default">
+          <div class="panel-heading font-bold">Box Descrapencies (in Warehouse) - <b>Total: {{ descrapency_boxes | sumByKey: 'cbm' }}</div>
+          <div class="panel-body">
+            <div class="table-responsive" style="overflow-y: auto; height: 350px;">
+              <table class="table table-bordered" id="dashboard_descrapency_tables">
+                <thead>
+                  <th class="text-center">#</th>
+                  <th class="text-center">Invoice Number</th>
+                  <th class="text-center">Company</th>
+                  <th class="text-center">CBM</th>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="v in descrapency_boxes">
+                    <td class="text-right">{{ $index + 1 }}</td>
+                    <td class="text-right">{{ v.invoice_number }}</td>
+                    <td>{{ v.firm_name }}</td>
+                    <td class="text-right">{{ v.cbm }}</td>
+                  </tr>
+                  <tr ng-if="!descrapency_boxes.length">
+                    <td colspan="4">No Data Available</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="panel panel-default">
+          <div class="panel-heading font-bold">Recent 6 Months Sales</div>
+          <div class="panel-body">
+            <div id="chartdiv" style="height: 300px;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="rows">
+      <!-- <div class="col-md-6">
+        <div class="panel panel-default">
+          <div class="panel-heading font-bold">Pending Credits</div>
+          <div class="panel-body">
+            <div class="table-responsive" style="overflow-y: auto; height: 350px;">
+              <table class="table table-bordered" id="dashboard_credit_tables">
+                <thead>
+                  <th class="text-center">#</th>
+                  <th class="text-center">Invoice Number</th>
+                  <th class="text-center">Consignee Details</th>
+                  <th class="text-center">Invoice Total Amount</th>
+                  <th class="text-center">Creditable Amount</th>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="v in dPayments">
+                    <td class="text-right">{{ $index + 1 }}</td>
+                    <td class="text-right">{{ v.invoice_number }}</td>
+                    <td title="
+                      {{ v.consignee_address }}
+                      {{ v.consignee_phone_number }}">
+                      {{ v.consignee_name }} <br />
+                    </td>
+                    <td class="text-right">{{ v.invoice_total_amount_sum | INR:false }}</td>
+                    <td class="text-right">{{ v.total_pending_amount | INR:false }}</td>
+                  </tr>
+                  <tr ng-if="!dPayments.length">
+                    <td colspan="5">No Data Available</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div> -->
+    </div>
+    <div class="clearfix"></div>
+    <div class="rows">
+      <div class="col-md-6">
+        <div class="panel panel-default">
+          <div class="panel-heading font-bold">Sales Agents Rankings ({{ startOfMonth }} to {{ endOfMonth }})</div>
+          <div class="panel-body">
+            <div class="table-responsive" style="overflow-y: auto; height: 350px;">
+              <table class="table table-bordered">
+                <thead>
+                  <th class="text-center">#</th>
+                  <th class="text-center">Full Name</th>
+                  <th class="text-center">Total CBM</th>
+                  <th class="text-center">Total Qty</th>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="v in dSalesAgents | orderBy: 'total_cbm': true">
+                    <td class="text-right">{{ $index + 1 }}</td>
+                    <td>{{ v.full_name }}</td>
+                    <td class="text-right">{{ v.total_cbm }}</td>
+                    <td class="text-right">{{ v.total_qty }}</td>
+                  </tr>
+                  <tr ng-if="!dSalesAgents.length">
+                    <td colspan="4">No Data Available</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

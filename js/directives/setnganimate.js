@@ -1,0 +1,1 @@
+angular.module("app").directive("setNgAnimate",["$animate",function(n){return{link:function(e,t,a){e.$watch(function(){return e.$eval(a.setNgAnimate,e)},function(e,a){n.enabled(!!e,t)})}}}]);

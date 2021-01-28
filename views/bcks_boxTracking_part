@@ -1,0 +1,44 @@
+
+          <tbody>
+            <tr ng-repeat="v in tableData" data-refpid="{{v.id}}">
+              <!-- <td>
+                <button class="btn btn-xs btn-primary" ng-click="onClickAddBulk($index, v)"><i class="fa fa-plus"></i></button>
+              </td>
+              <td>
+                <a class="btn btn-warning btn-xs" ui-sref="app.newBoxTracking({t: 'u', id: v.invoice_number})">
+                  <i class="fa fa-pencil"></i>
+                </a> -->
+                <!-- <button class="btn btn-danger btn-xs" ng-click="deleteThisItem($index, v)"><i class="fa fa-times"></i></button> -->
+              <!-- </td> -->
+              <td>{{ v.pick_up_date | momentFltr:'YYYY-MM-DD':'DD-MM-YYYY' }}</td>
+              <td>{{ v.invoice_number }}</td>
+              <td>{{ v.tracking_number }}</td>
+              <td>{{ v.loaded_date | momentFltr:'YYYY-MM-DD':'DD-MM-YYYY' }}</td>
+              <td>{{ v.container_number }}</td>
+              <td>{{ v.forwarder_data.name }}</td>
+              <td>{{ v.container_destination_arrival_date | momentFltr:'YYYY-MM-DD':'DD-MM-YYYY' }}</td>
+              <td>{{ v.box_unique_number }}</td>
+              <td>{{ v.quantity }}</td>
+              <td>{{ v.box_status_data.name }}</td>
+              <td>{{ v.box_length }}</td>
+              <td>{{ v.box_breadth }}</td>
+              <td>{{ v.box_height }}</td>
+              <td>{{ v.cbm }}</td>
+              <td>{{ v.package_type_data.name }}</td>
+              <td>{{ v.is_box_descrapency }}</td>
+              <td>{{ v.destination_data.name }}</td>
+              <td>{{ v.port_data.name }}</td>
+              <td>{{ v.consignee_name }}</td>
+              <td>{{ v.consignee_phone_number }}</td>
+              <td>{{ v.consignee_address }}</td>
+              <td>{{ v.supplier_name }}</td>
+              <td>{{ v.supplier_phone_number }}</td>
+              <td>{{ v.supplier_address }}</td>
+              <td>{{ v.sales_agent_data.name }}</td>
+              <td>{{ v.driver_data.name }}</td>
+              <td class="text-right">{{ v.cash_amount }}</td>
+              <td class="text-right">{{ v.credit_amount }}</td>
+              <td class="text-right">{{ v.invoice_total_amount }}</td>
+              <td>{{ v.notes }}</td>
+            </tr>
+          </tbody>

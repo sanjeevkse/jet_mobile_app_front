@@ -1,0 +1,167 @@
+<!-- hbox layout -->
+<div class="hbox hbox-auto-xs bg-light" ng-controller="paymentMgmtController">
+  <!-- column -->
+  <div class="col">
+    <div class="vbox">
+      <div class="row-row">
+        <div class="wrapper">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="panel panel-default">
+                <div class="panel-body">
+                  <div class="col-md-3">
+                    <h4>Pending Payments</h4>
+                    <input type="text" class="form-control" ng-model="searchText" placeholder="Search by invoice number" style="margin-bottom: 10px;" />
+                    <div style="height: 400px; overflow: auto;">
+                      <table class="table table-hover table-bordered table-stripeds">
+                        <tbody>
+                          <tr ng-repeat="v in arrPendingInvoices | filter: searchText" ng-click="onClickPendingInvoice(v)">
+                            <td>
+                              <div>
+                                <div>Invoice: <b>{{v.invoice_number}}</b></div>
+                                <div>Forwarder: <b>{{v.forwarder_name}}</b></div>
+                                <div>Invoice Total: <b>{{v.sum_invoice_total_amount}}</b>, <span class="text-danger">Pendings: <b>{{v.sum_invoice_total_amount - v.sum_paid_amount}}</b></span></div>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <h4>New Payment</h4>
+                    <div class="form-group col-md-12">
+                        <label class="control-label">Receipt Number <span class="text-danger text-bold text-lg">*</span></label>
+                        <input type="text" class="form-control" ng-model="mainForm.receipt_number.value" />
+                        <span class="text-danger" ng-if="mainForm.receipt_number.error">Please enter valid Receipt Number</span>
+                    </div>
+                    <div class="form-group">
+                        <div class=" col-md-6">
+                            <label>Payment Mode <span class="text-danger text-bold text-lg">*</span></label>
+                            <select ng-model="mainForm.payment_mode_id.value" required class="form-control" ng-options="v.id as v.item_name for v in paymentModes" ng-class="{ 'b-danger': mainForm.payment_mode_id.error }"></select>
+                            <span class="text-danger" ng-if="mainForm.payment_mode_id.error">Please enter valid Payment Mode</span>
+                        </div>
+                        <div class=" col-md-6">
+                            <label class="control-label">Paid Amount (KD) <span class="text-danger text-bold text-lg">*</span></label>
+                            <input type="text" ng-model="mainForm.paid_amount.value" ng-change="onChangePaidAmount()" ng-blur="onChangePaidAmount()" id="paid_amount" class="form-control text-right" />
+                            <span class="text-danger" ng-if="mainForm.paid_amount.error">Please enter valid Paid Amount</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <label class="control-label">Paid Date <span class="text-danger text-bold text-lg">*</span></label>
+                            <div class="input-group w-sm">
+                              <input 
+                                type="text" 
+                                class="form-control" 
+                                datepicker-popup="{{formats}}" 
+                                ng-model="mainForm.paid_date.value" 
+                                is-open="opened" 
+                                readonly="true" 
+                                datepicker-options="dateOptions" 
+                                ng-required="true" 
+                                close-text="Close" />
+                              <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="openPickup($event)" style="margin: 0; margin-left: -1px; height: 34px;"><i class="glyphicon glyphicon-calendar"></i></button>
+                              </span>
+                            </div>
+                            <span class="text-danger" ng-if="mainForm.paid_date.error">Please enter valid Paid Date</span>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="control-label">Entering Date <span class="text-danger text-bold text-lg">*</span></label>
+                            <input type="text" class="form-control" disabled="true" ng-model="mainForm.entered_date.value" />
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12">
+                      <label class="control-label">Notes</label>
+                      <textarea class="form-control" ng-model="mainForm.notes.value"></textarea>
+                    </div>
+                    <div class="form-group pull-right">
+                      <button class="btn btn-default" ng-click="onClearPayment()">Cancel</button>
+                      <button class="btn btn-primary" ng-click="onSubmitPayment()">Save</button>
+                    </div>
+                  </div>
+                  <div class="col-md-5">
+                    <h4>Details of the Invoice</h4>
+                    <div style="height: 400px; overflow: auto;">
+                      <table class="table table-hover table-bordered table-striped">
+                        <tbody>
+                          <tr>
+                              <td>
+                                  Invoice Number: 
+                                  <b>{{selectedInvoiceDetails.invoice_details[0].invoice_number}}</b>
+                              </td>
+                          </tr>
+                          <tr>
+                              <td colspan="4">
+                                  Forwarder Name: 
+                                  <b>{{selectedInvoiceDetails.invoice_details[0].forwarder_name}}</b>
+                              </td>
+                          </tr>
+                          <tr>
+                              <td colspan="4">
+                                  Sales Agent Name: 
+                                  <b>{{selectedInvoiceDetails.invoice_details[0].sales_agent_name}}</b>
+                              </td>
+                          </tr>
+                          <tr>
+                              <td colspan="4">
+                                  Consignee Details <br />
+                                  <b>{{selectedInvoiceDetails.invoice_details[0].consignee_name}}<br />
+                                  {{selectedInvoiceDetails.invoice_details[0].consignee_phone_number}}<br />
+                                  {{selectedInvoiceDetails.invoice_details[0].consignee_address}}<br /></b>
+                              </td>
+                          </tr>
+                          <tr>
+                              <td colspan="4">
+                                  Shipper Details <br />
+                                  <b>{{selectedInvoiceDetails.invoice_details[0].supplier_name}}<br />
+                                  {{selectedInvoiceDetails.invoice_details[0].supplier_phone_number}}<br />
+                                  {{selectedInvoiceDetails.invoice_details[0].supplier_address}}<br /></b>
+                              </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <table class="table table-hover table-bordered table-striped">
+                          <tr>
+                              <td colspan="3">
+                                  <h4>Paid History</h4>
+                              </td>
+                          </tr>
+                          <tr ng-repeat="(k, v) in selectedInvoiceDetails.payment_history_details">
+                              <td>{{v.receipt_number || '--'}}</td>
+                              <td>{{v.paid_date | momentFltr:'YYYY-MM-DD': 'DD-MM-YYYY'}}</td>
+                              <td class="text-right">{{v.paid_amount}}</td>
+                          </tr>
+                      </table>
+                      <table class="table table-hover table-bordered table-striped">
+                          <tr>
+                              <td colspan="3">
+                                  <h4>Invoice Boxes</h4>
+                              </td>
+                          </tr>
+                          <tr ng-repeat="(k, v) in selectedInvoiceDetails.invoice_details">
+                              <td>{{v.invoice_number + '/' + v.box_unique_number}}</td>
+                              <td>{{v.package_type_name}}</td>
+                              <td>{{v.cbm}}</td>
+                          </tr>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /column -->
+</div>
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<!-- /hbox layout -->

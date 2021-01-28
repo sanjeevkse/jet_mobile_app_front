@@ -1,0 +1,98 @@
+<!-- hbox layout -->
+<div class="hbox hbox-auto-xs bg-light" ng-controller="creditFacilityController">
+  <div class="col-md-12 section-border bg-white" style="padding: 20px 28px;">
+    <div class="panel panel-default">
+      <!-- <div class="panel-heading font-bold">
+        Filters 
+      </div> -->
+      <div class="panel-body">
+        <div class="form-group clearfix">
+          <div class="col-md-3">
+            <label class="control-label">Select an Option</label>
+            <select ng-model="filters.date_range_credit" class="form-control" ng-options="v.id as v.text for v in dropdowns.arrDateRange">
+            </select>
+          </div>
+          <div class="col-md-3">
+            <br />
+            <button class="btn btn-sm btn-primary" ng-click="onClickFilterApply()">Apply</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="col-md-12" style="height: 800px;">
+      <!-- <label class="control-label">Total CBM: {{ tableData | sumByKey: 'cbm' }}</label> -->
+      <!-- <label class="control-label">Total Qty: {{ tableData | sumByKey: 'qty' }}</label> -->
+      <div class="table-responsives" id="bt_table_resp">
+        <table class="table table-bordered table-hover nowrap" id="bt_table_credit">
+          <thead>
+            <tr>
+              <th style="background-color: #fff">Hold Email</th>
+              <th style="background-color: #fff">Unhold Email</th>
+              <th style="background-color: #fff">Pickup Date</th>
+              <th style="background-color: #fff">Forwarder</th>
+              <th style="background-color: #fff">Box Unique Number</th>
+              <th style="background-color: #fff">Invoice Number</th>
+              <th style="background-color: #fff">Tracking Number</th>
+              <th style="background-color: #fff">Consignee Name</th>
+              <th style="background-color: #fff">Shipper Name</th>
+              <th style="background-color: #fff">Shipper Phone Number</th>
+              <th style="background-color: #fff">Shipper Address</th>
+              <th style="background-color: #fff">Sales Agent</th>
+              <th style="background-color: #fff">Cash Amount</th>
+              <th style="background-color: #fff">Credit Amount</th>
+              <th style="background-color: #fff">Total Amount</th>
+              <th style="background-color: #fff">Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="v in tableData" data-refpid="{{v.id}}">
+              <td ng-class="">
+                <span ng-if="filters.date_range_credit != '0_40'">Email not required</span>
+                <span ng-if="filters.date_range_credit == '0_40' && v.is_hold_email_sent==1">Email sent</span>
+                <span ng-if="filters.date_range_credit == '0_40' && v.is_hold_email_sent==0">
+                  Send an email
+                  <button class="btn btn-xs btn-primary" ng-click="send40DaysEmail(v)">Email Sent</button>
+                </span>
+              </td>
+              <td ng-class="">
+                <span ng-if="filters.date_range_credit != '0_40'">Email not required</span>
+                <div ng-if="filters.date_range_credit == '0_40' && v.credit_amount ==1">Due is not cleared</div>
+                <div ng-if="filters.date_range_credit == '0_40' && v.credit_amount==0">Due is cleared</div>
+                <span ng-if="filters.date_range_credit == '0_40' && v.is_unhold_email_sent==1">Email sent</span>
+                <div ng-if="filters.date_range_credit == '0_40' && v.is_unhold_email_sent==0 && v.is_hold_email_sent==1">
+                  Send an email
+                  <button class="btn btn-xs btn-primary" ng-click="sendUnholdEmail(v)">Email Sent</button>
+                </div>
+              </td>
+              <td>{{ v.pick_up_date | momentFltr:'YYYY-MM-DD':'DD-MM-YYYY' }}</td>
+              <td>{{ v.forwarder_data.name }}</td>
+              <td>{{ v.box_unique_number }}</td>
+              <td>{{ v.invoice_number }}</td>
+              <td>{{ v.tracking_number }}</td>
+              <td>{{ v.consignee_name }}</td>
+              <td>{{ v.supplier_name }}</td>
+              <td>{{ v.supplier_phone_number }}</td>
+              <td>{{ v.supplier_address }}</td>
+              <td>{{ v.sales_agent_data.name }}</td>
+              <td class="text-right">{{ v.cash_amount }}</td>
+              <td class="text-right">{{ v.credit_amount }}</td>
+              <td class="text-right">{{ v.invoice_total_amount }}</td>
+              <td>{{ v.notes }}</td>
+            </tr>
+            <tr ng-if="!tableData.length">
+              <td colspan="13">No Data Available</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<!-- /hbox layout -->

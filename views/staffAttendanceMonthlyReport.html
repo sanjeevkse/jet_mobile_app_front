@@ -1,0 +1,79 @@
+<!-- hbox layout -->
+<div>
+    <ul class="nav nav-tabs ng-scope" style="">
+        <li>
+            <a ui-sref="app.staffAttendance.form">
+              New Attendance
+            </a>
+        </li>
+        <li class="active">
+            <a ui-sref="app.staffAttendance.monthlyReport">
+              Attendance Monthly Report
+            </a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active">
+            <div class="hbox hbox-auto-xs bg-light" ng-controller="staffAttendanceMonthlyReportController">
+                <div class="col-md-12 section-border bg-white" style="padding: 20px 28px;">
+                    <div class="row form-group">
+                        <div class="col-md-2">
+                            <label class="control-label">Select Month</label>
+                            <select ng-model="report.selMonth" class="form-control" ng-options="v.key as v.value for v in arrMonths">
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="control-label">Select Year</label>
+                            <select ng-model="report.selYear" class="form-control" ng-options="v.key as v.value for v in arrYears">
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <br />
+                            <button class="btn btn-primary" ng-click="onClickGetReport()">Get Report</button>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="clearfix"></div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="staff_attendance_table">
+                            <thead>
+                                <tr>
+                                    <th colspan="{{2+arrStaffAttendance[0].attendance_data.length+1}}" class="text-center">
+                                        Staff Attendance Report for {{attendance_for | momentFltr: 'YYYY-MM-DD': 'MMMM, YYYY'}}
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Staff Name</th>
+                                    <th ng-repeat="v in arrStaffAttendance[0].attendance_data">
+                                        {{v.attendance_date | momentFltr: 'YYYY-MM-DD': 'DD'}}
+                                    </th>
+                                    <th>Total Days</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="v in arrStaffAttendance">
+                                    <td>{{$index + 1}}</td>
+                                    <td>{{v.staff_data.user_code}}</td>
+                                    <td ng-repeat="vv in v.attendance_data" ng-class="{'bg-custom-danger': !vv.attendance_attended, 
+                                    'bg-custom-white': vv.attendance_attended,
+                                    'bg-custom-grey': vv.attendance_date_day_number == 5}">
+                                        {{vv.attendance_attended > 0 ? 'P' : 'A'}}
+                                    </td>
+                                    <td class="text-bold">{{v.attendance_data | sumByKey: 'attendance_attended'}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <!-- /hbox layout -->
+        </div>
+    </div>
+</div>

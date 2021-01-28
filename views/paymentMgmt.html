@@ -1,0 +1,284 @@
+<!-- hbox layout -->
+<div class="hbox hbox-auto-xs bg-light" ng-controller="paymentMgmtController">
+  <div class="col-md-12 section-border bg-white" style="padding: 20px 28px;">
+    <div class="panel panel-default" ng-if="[3].indexOf(localStorageMemory.user.user_role_id * 1)>=0">
+      <!-- <div class="panel-heading font-bold">
+        Filters 
+      </div> -->
+      <div class="panel-body">
+        <div class="form-group clearfix" ng-show="is_exapanded">
+          <div class="form-group col-md-12">
+            <div class="row">
+              <div class="col-md-3" ng-repeat="v in checkboxesFirms">
+                <div class="checkbox">
+                  <label class="i-checks">
+                    <input type="checkbox" ng-model="v.btSelected"><i></i> {{ v.item_name }}
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group col-md-12">
+            <div class="col-md-3">
+              <label class="control-label">Pick up date</label>
+              <input ui-jq="daterangepicker" ng-model="filters.pick_up_date" ui-options="{{ dateRangePickerOptions }}" class="form-control w-md" />
+            </div>
+            <div class="col-md-3">
+              <label class="control-label">Loaded date</label>
+              <input ui-jq="daterangepicker" ng-model="filters.loaded_date" ui-options="{{ dateRangePickerOptions }}" class="form-control w-md" />
+            </div>
+            <div class="col-md-3">
+              <label class="control-label">Cont. Dest. Arrival date</label>
+              <input ui-jq="daterangepicker" ng-model="filters.container_destination_arrival_date" ui-options="{{ dateRangePickerOptions }}" class="form-control w-md" />
+            </div>
+          </div>
+          <div class="form-group col-md-12">
+            <div class="col-md-3">
+              <label class="control-label col-md-12 row">Port</label>
+              <select ng-model="filters.port_id" style="width: 100%" id="select_port" class="form-control" ng-options="v.id as v.item_name for v in dropdowns.arrPorts">
+                <option value="">-Select an Option</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label class="control-label">Forwarder</label>
+              <select ng-model="filters.forwarder_id" class="form-control" ng-options="v.id as v.item_name for v in dropdowns.arrForwarders">
+                <option value="">-Select an Option</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label class="control-label">Boxes in Warehouse</label>
+              <select ng-model="filters.boxes_in_warehouse" class="form-control" ng-options="v.id as v.text for v in dropdowns.arrBoxesInWarehouse">
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label class="control-label">Is Box Descrapency</label>
+              <select ng-model="filters.is_box_descrapency" class="form-control" ng-options="v.id as v.text for v in dropdowns.arrIsBoxesDescrapency">
+              </select>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+          <div class="form-group text-right col-md-12">
+            <button class="btn btn-sm btn-primary" ng-click="onClickFilterApply()">Apply</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-md-12">
+            <button class="pull-right btn btn-xs btn-warning" ng-show="is_exapanded" ng-click="is_exapanded=false">Collapse</button>
+            <button class="pull-right btn btn-xs btn-warning" ng-show="!is_exapanded" ng-click="is_exapanded=true">Expand</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+    <Br />
+    <div class="col-md-12" style="height: 800px;">
+        <div class="row col-md-3">
+            <select ng-model="filters.date_range" class="form-control" ng-options="v.id as v.text for v in dropdowns.arrDateRange">
+            </select>
+        </div>
+        <div class="col-md-3">
+            <button ng-click="onClickFilterApply()" class="btn btn-primary">Get Entries</button>
+        </div>
+        <div class="clearfix"></div>
+      <label class="control-label hidden text-danger" id="fetch_te">Fetching your data, please sit back</label>
+      <label class="control-label hidden text-danger" id="structure_te">Structuring your data for excel export</label>
+      <label class="control-label hidden bg-success" id="ready_te">Ready to export</label>
+      <div class="table-responsives" id="bt_table_resp" ng-show="[3].indexOf(localStorageMemory.user.user_role_id * 1)>=0">
+        <table class="table table-bordered table-striped table-hover nowrap" id="bt_table">
+          <thead>
+            <tr>
+              <th style="background-color: #fff">Payments</th>
+              <th style="background-color: #fff">Hold Email</th>
+              <th style="background-color: #fff">Unhold Email</th>
+              <!--<th style="background-color: #fff">All Status</th>-->
+              <th style="background-color: #fff">Pickup Date</th>
+              <th style="background-color: #fff">Delay in Days</th>
+              <th style="background-color: #fff">Invoice Number</th>
+              <th style="background-color: #fff">Tracking Number</th>
+              <th style="background-color: #fff">Loaded Date</th>
+              <th style="background-color: #fff">Container Number</th>
+              <th style="background-color: #fff">Forwarder</th>
+              <th style="background-color: #fff">Cont. Dest. Arrival Date</th>
+              <th style="background-color: #fff">Quantity</th>
+              <th style="background-color: #fff">Port</th>
+              <th style="background-color: #fff">Consignee Name</th>
+              <th style="background-color: #fff">Consignee Phone Number</th>
+              <th style="background-color: #fff">Consignee Address</th>
+              <th style="background-color: #fff">Shipper Name</th>
+              <th style="background-color: #fff">Shipper Phone Number</th>
+              <th style="background-color: #fff">Shipper Address</th>
+              <th style="background-color: #fff">Sales Agent</th>
+              <th style="background-color: #fff">Driver</th>
+              <th style="background-color: #fff">Cash Amount</th>
+              <th style="background-color: #fff">Credit Amount</th>
+              <th style="background-color: #fff">Total Amount</th>
+              <th style="background-color: #fff">Notes</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+      <div class="table-responsives" id="bt_table_resp2" ng-show="[47, 48].indexOf(localStorageMemory.user.user_role_id * 1)>=0">
+        <table class="table table-bordered table-striped table-hover nowrap" id="bt_table3">
+          <thead>
+            <tr>
+              <th style="background-color: #fff">Payments</th>
+              <th style="background-color: #fff">Hold Email</th>
+              <th style="background-color: #fff">Unhold Email</th>
+              <!--<th style="background-color: #fff">All Status</th>-->
+              <th style="background-color: #fff">Pickup Date</th>
+              <th style="background-color: #fff">Delay in Days</th>
+              <th style="background-color: #fff">Invoice Number</th>
+              <th style="background-color: #fff">Tracking Number</th>
+              <th style="background-color: #fff">Loaded Date</th>
+              <th style="background-color: #fff">Container Number</th>
+              <th style="background-color: #fff">Forwarder</th>
+              <th style="background-color: #fff">Cont. Dest. Arrival Date</th>
+              <th style="background-color: #fff">Quantity</th>
+              <th style="background-color: #fff">Port</th>
+              <th style="background-color: #fff">Consignee Name</th>
+              <th style="background-color: #fff">Consignee Phone Number</th>
+              <th style="background-color: #fff">Consignee Address</th>
+              <th style="background-color: #fff">Shipper Name</th>
+              <th style="background-color: #fff">Shipper Phone Number</th>
+              <th style="background-color: #fff">Shipper Address</th>
+              <th style="background-color: #fff">Sales Agent</th>
+              <th style="background-color: #fff">Driver</th>
+              <th style="background-color: #fff">Cash Amount</th>
+              <th style="background-color: #fff">Credit Amount</th>
+              <th style="background-color: #fff">Total Amount</th>
+              <th style="background-color: #fff">Notes</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+    </div>
+  </div>
+  <script type="text/ng-template" id="invoiceStatusModal.html">
+    <div>
+        <div class="modal-header">
+            <h3 class="modal-title">Modal!</h3>
+        </div>
+        <div class="modal-body">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Day Difference</th>
+                    </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="(k, v) in boxDetails.boxStatusDetails">
+                      <td>{{$index + 1}}</td>
+                      <td>{{v.box_status_name}}</td>
+                      <td>{{v.box_status_date | momentFltr:'YYYY-MM-DD': 'DD-MM-YYYY'}}</td>
+                      <td>{{boxDetails.boxStatusDetails[k-1].box_status_date && v.box_status_date ? (boxDetails.boxStatusDetails[k-1].box_status_date | diffDates: v.box_status_date) + ' days' : ''}}</td>
+                  </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="modal-footer">                  
+            <button class="btn btn-primary" ng-click="ok()">OK</button>
+        </div>
+    </div>
+  </script>
+  <script type="text/ng-template" id="invoicePaymentsModal.html">
+    <div>
+        <div class="modal-header">
+            <h3 class="modal-title">Payments | {{mainForm.invoice_number.value}}</h3>
+        </div>
+        <div class="modal-body">
+            <div class="col-md-12 row">
+                <div class="form-group">
+                    <div class=" col-md-4">
+                        <label class="control-label">Receipt Number <span class="text-danger text-bold text-lg">*</span></label>
+                        <input type="text" class="form-control" ng-model="mainForm.receipt_number.value" />
+                        <span class="text-danger" ng-if="mainForm.receipt_number.error">Please enter valid Receipt Number</span>
+                    </div>
+                    <div class=" col-md-4">
+                        <label>Payment Mode <span class="text-danger text-bold text-lg">*</span></label>
+                        <select ng-model="mainForm.payment_mode_id.value" required class="form-control" ng-options="v.id as v.item_name for v in paymentModes" ng-class="{ 'b-danger': mainForm.payment_mode_id.error }"></select>
+                        <span class="text-danger" ng-if="mainForm.payment_mode_id.error">Please enter valid Payment Mode</span>
+                    </div>
+                    <div class=" col-md-4">
+                        <label class="control-label">Paid Amount (KD) <span class="text-danger text-bold text-lg">*</span></label>
+                        <input type="text" ng-model="mainForm.paid_amount.value" ng-change="onChangePaidAmount()" ng-blur="onChangePaidAmount()" id="paid_amount" class="form-control text-right" />
+                        <span class="text-danger" ng-if="mainForm.paid_amount.error">Please enter valid Paid Amount</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label class="control-label">Paid Date <span class="text-danger text-bold text-lg">*</span></label>
+                        <div class="input-group w-sm">
+                          <input 
+                            type="text" 
+                            class="form-control" 
+                            datepicker-popup="{{formats}}" 
+                            ng-model="mainForm.paid_date.value" 
+                            is-open="openedPaidDate" 
+                            readonly="true" 
+                            datepicker-options="dateOptions" 
+                            ng-required="true" 
+                            close-text="Close" />
+                          <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="openPaidDate($event)" style="margin: 0; margin-left: -1px; height: 34px;"><i class="glyphicon glyphicon-calendar"></i></button>
+                          </span>
+                        </div>
+                        <span class="text-danger" ng-if="mainForm.paid_date.error">Please enter valid Paid Date</span>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="control-label">Entering Date <span class="text-danger text-bold text-lg">*</span></label>
+                        <input type="text" class="form-control" disabled="true" ng-model="mainForm.entered_date.value" />
+                    </div>
+                </div>
+                <div class="form-group col-md-12">
+                    <label class="control-label">Notes</label>
+                    <textarea class="form-control" ng-model="mainForm.notes.value"></textarea>
+                </div>
+                <div class="form-group pull-right">
+                    <button class="btn btn-primary" ng-click="onSubmitPayment()">Save</button>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Paid Date</th>
+                                <th>Amount Paid</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                          <tr ng-repeat="(k, v) in selectedInvoicePaymentDetails">
+                              <td>{{v.paid_date | momentFltr:'YYYY-MM-DD': 'DD-MM-YYYY'}}</td>
+                              <td>{{v.paid_amount}}</td>
+                              <td>{{v.notes}}</td>
+                          </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="modal-footer">                  
+            <button class="btn btn-primary" ng-click="ok()">OK</button>
+        </div>
+    </div>
+  </script>
+</div>
+
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<!-- /hbox layout -->

@@ -1,0 +1,106 @@
+<!-- hbox layout -->
+<div class="hbox hbox-auto-xs bg-light" ng-controller="adminManagementController">
+  <!-- column -->
+  <div class="col">
+    <div class="vbox">
+      <div class="wrapper bg-light lt b-b">
+        <span class="font-bold" ng-if="!mainForm.id.value">Admin Management</span>
+        <span class="font-bold" ng-if="!!mainForm.id.value">Updating <b>{{::mainForm.item_name.value}} ...</b></span>
+        <div class="m-l inline dropdown" dropdown>
+          <a class="v-middle pos-rlt inline bg-{{note.color}}" dropdown-toggle style="width:16px;height:16px;top:-2px"></a>
+          <div class="dropdown-menu animated fadeInUp w wrapper">
+            <a ng-repeat="color in colors" class="inline m-xs bg-{{color}}" style="width:18px;height:18px" ng-click=" note.color = color "></a>
+          </div>
+        </div>
+      </div>
+      <div class="row-row">
+        <div class="wrapper">
+          <div class="row">
+            <div class="col-md-4">
+              <div class="panel panel-default">
+                <div class="panel-body">
+                  <div class="form-group" ng-if="mainForm.id.value">
+                    <span class="badge bg-info"> Editing </span>
+                  </div>
+                  <div class="form-group clearfix">
+                    <label>Category <span class="text-danger text-bold text-lg">*</span></label>
+                    <select ng-model="mainForm.category.value" required class="form-control" ng-options="v.id as v.text for v in arrCategories" ng-class="{ 'b-danger': mainForm.category.error }"></select>
+                    <span class="text-danger" ng-if="mainForm.category.error">Please enter valid Category</span>
+                  </div>
+                  <div class="form-group clearfix">
+                    <label>Display Name / Title <span class="text-danger text-bold text-lg">*</span></label>
+                    <input 
+                      type="text" 
+                      class="form-control" 
+                      required 
+                      placeholder=""
+                      ng-model="mainForm.item_name.value"
+                      ng-class="{ 'b-danger': mainForm.item_name.error }" />
+                    <span class="text-danger" ng-if="mainForm.item_name.error">Please enter valid Display Name / Title</span>
+                  </div>
+                  <div class="form-group clearfix">
+                    <label>Description</label>
+                    <textarea class="form-control" ng-model="mainForm.description.value"></textarea>
+                    <span class="text-danger" ng-if="mainForm.description.error">Please enter valid Description</span>
+                  </div>
+                  <hr />
+                  <div class="form-group pull-right">
+                    <button ng-click="clearState()" ng-if="!mainForm.id.value" class="btn" tabindex="-1">Clear</button>
+                    <button ng-click="clearState()" ng-if="mainForm.id.value" class="btn" tabindex="-1">Cancel</button>
+                    <button ng-click="submitForm()" class="btn btn-primary">Save</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-8">
+              <div class="panel panel-default">
+                <div class="panel-body">
+                  <div class="form-group clearfix">
+                    <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th>
+                            <input type="text" class="form-control" placeholder="Search" ng-model="filters.category" />
+                          </th>
+                          <th>
+                            <input type="text" class="form-control" placeholder="Search" ng-model="filters.item_name" />
+                          </th>
+                          <th>
+                            <input type="text" class="form-control" placeholder="Search" ng-model="filters.description" />
+                          </th>
+                          <!-- <th></th> -->
+                        </tr>
+                        <tr>
+                          <th>Category</th>
+                          <th>Display Name / Title</th>
+                          <th>Description</th>
+                          <!-- <th>Actions</th> -->
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr ng-repeat="v in tableData | filter: {category: filters.category, item_name: filters.item_name, description: filters.description}">
+                          <td>{{ v.category }}</td>
+                          <td>{{ v.item_name }}</td>
+                          <td>{{ v.description }}</td>
+                          <!-- <td>
+                            <button class="btn btn-warning btn-xs"><i class="fa fa-pencil"></i></button>
+                            <button class="btn btn-danger btn-xs"><i class="fa fa-remove"></i></button>
+                          </td> -->
+                        </tr>
+                        <tr ng-if="tableData.length <=0">
+                          <td colspan="3">No Data Available</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /column -->
+</div>
+<!-- /hbox layout -->

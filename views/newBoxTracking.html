@@ -1,0 +1,552 @@
+<!-- hbox layout -->
+<div class="hbox hbox-auto-xs bg-light" ng-controller="newBoxTrackingController">
+  <!-- column -->
+  <div class="col">
+    <div class="vbox">
+      <div class="wrapper bg-light lt b-b">
+        <span class="font-bold" ng-if="!mainForm.id.value">New Invoice</span>
+        <span class="font-bold" ng-if="!!mainForm.id.value">Updating <b>{{::mainForm.item_name.value}} ...</b></span>
+        <div class="m-l inline dropdown" dropdown>
+          <a class="v-middle pos-rlt inline bg-{{note.color}}" dropdown-toggle style="width:16px;height:16px;top:-2px"></a>
+          <div class="dropdown-menu animated fadeInUp w wrapper">
+            <a ng-repeat="color in colors" class="inline m-xs bg-{{color}}" style="width:18px;height:18px" ng-click=" note.color = color "></a>
+          </div>
+        </div>
+      </div>
+      <div class="row-row">
+        <div class="wrapper">
+          <div class="row"> 
+            <div class="col-md-12">
+              <div class="panel panel-default">
+                <div class="panel-body">
+                  <div class="form-group clearfix" ng-show="is_exapanded">
+                    <div ng-repeat="(k, v) in mainForm" class="" style="display: inline-block; margin: 4px; padding: 1px 14px; border: 1px solid #eee;" ng-class="{'bg-light-success': v.show}" ng-if="v.dispText" for="ck_{{k}}">
+                      <div class="checkbox">
+                        <label class="i-checks" style="padding-left: 0;">
+                          <input type="checkbox" ng-change="onChangeField(k, v)" class="hidden" ng-model="v.show"><i class="hidden"></i> {{ v.dispText }}
+                        </label>
+                      </div>
+                    </div>
+                    <div ng-repeat="(k, v) in detailForm[0]" class="" style="display: inline-block; margin: 4px; padding: 1px 14px; border: 1px solid #eee;" ng-class="{'bg-light-success': v.show}" ng-if="v.dispText" for="ck_{{k}}">
+                      <div class="checkbox">
+                        <label class="i-checks" style="padding-left: 0;">
+                          <input type="checkbox" ng-change="onChangeDetailField(k, v)" class="hidden" ng-model="v.show"><i class="hidden"></i> {{ v.dispText }}
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-md-12">
+                      <button class="pull-right btn btn-xs btn-warning" ng-show="is_exapanded" ng-click="is_exapanded=false">Collapse</button>
+                      <button class="pull-right btn btn-xs btn-warning" ng-show="!is_exapanded" ng-click="is_exapanded=true">Expand</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="wrapper">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="panel panel-default">
+                <div class="panel-body">
+                  <div class="form-group" ng-if="mainForm.id.value">
+                    <span class="badge bg-info"> Editing </span>
+                  </div>
+                  <div class="clearfix"></div>
+                  <div class="col-md-12 section-border" ng-show="show_section=='FORM'">
+                    <div class="row form-group">
+                      <div class="col-md-2">
+                        <label class="form-label">Company Name <span class="text-danger text-bold text-lg" ng-if="mainForm.firm_id.validPattern.indexOf('required')>=0">*</span></label>
+                        <select ng-model="mainForm.firm_id.value" ng-change="onChangeCompany()" required class="form-control" ng-options="v.id as v.item_name for v in arrFirms"></select>
+                        <span class="text-danger" ng-if="mainForm.firm_id.error">Please enter valid Company Name</span>
+                      </div>
+                      <div class="col-md-2" ng-if="mainForm.firm_id.value==4">
+                        <label class="form-label">Co Loader <span class="text-danger text-bold text-lg" ng-if="mainForm.co_loader_id.validPattern.indexOf('required')>=0">*</span></label>
+                        <select ng-model="mainForm.co_loader_id.value" ng-change="onChangeCompany()" required class="form-control" ng-options="v.id as v.item_name for v in arrCoLoaders"></select>
+                        <span class="text-danger" ng-if="mainForm.co_loader_id.error">Please enter valid Co Loader</span>
+                      </div>
+                      <div class="col-md-2">
+                        <label class="form-label">Pickup Date <span class="text-danger text-bold text-lg" ng-if="mainForm.firm_id.validPattern.indexOf('required')>=0">*</span></label>
+                        <div class="input-group w-sm">
+                          <input 
+                            type="text" 
+                            class="form-control" 
+                            datepicker-popup="{{formats}}" 
+                            ng-model="mainForm.pick_up_date.value" 
+                            is-open="openedPickup" 
+                            readonly="true" 
+                            datepicker-options="dateOptionsMaxYesterday" 
+                            ng-required="true" 
+                            close-text="Close" />
+                          <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="openPickup($event)" style="margin: 0; margin-left: -1px; height: 34px;"><i class="glyphicon glyphicon-calendar"></i></button>
+                          </span>
+                        </div>
+                        <span class="text-danger" ng-if="mainForm.pick_up_date.error">Please enter valid Pickup Date</span>
+                      </div>
+                      <div class="col-md-3">
+                        <label class="form-label">Invoice Number <span class="text-danger text-bold text-lg" ng-if="mainForm.invoice_number.validPattern.indexOf('required')>=0">*</span></label>
+                        <input 
+                          type="text" 
+                          class="form-control" 
+                          required 
+                          placeholder=""
+                          id="invoice_number"
+                          ng-readonly="stateParams.t=='u'"
+                          ng-blur="onBlurInvoiceNumber()"
+                          ng-model="mainForm.invoice_number.value"
+                          ng-class="{ 'b-danger': mainForm.invoice_number.error }" />
+                        <span class="text-danger" ng-if="mainForm.invoice_number.error">Please enter valid Invoice Number</span>
+                      </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="col-md-12 multi-section form-group">
+                      <div class="multi-section-item form-group" ng-repeat="v in detailForm">
+                        <div class="form-group">
+                          <b>Box Unique Number: {{ mainForm.invoice_number.value +'/'+ v.box_unique_number.value }}</b>
+                        </div>
+                        <div class="row form-group">
+                          <div class="col-md-2" ng-show="v.tracking_number.show">
+                            <label class="form-label">Tracking Number <span class="text-danger text-bold text-lg" ng-if="v.tracking_number.validPattern.indexOf('required')>=0">*</span></label>
+                            <input 
+                              type="text" 
+                              class="form-control" 
+                              required 
+                              placeholder=""
+                              ng-model="v.tracking_number.value"
+                              ng-class="{ 'b-danger': v.tracking_number.error }" />
+                            <span class="text-danger" ng-if="v.tracking_number.error">Please enter valid Tracking Number</span>
+                          </div>
+                          <div class="col-md-2" ng-show="v.loaded_date.show">
+                            <label class="form-label">Loaded Date <span class="text-danger text-bold text-lg" ng-if="v.loaded_date.validPattern.indexOf('required')>=0">*</span></label>
+                            <div class="input-group w-sm">
+                              <input 
+                                type="text" 
+                                class="form-control" 
+                                datepicker-popup="{{formats}}" 
+                                ng-model="v.loaded_date.value" 
+                                is-open="v.openedLoaded" 
+                                readonly="true" 
+                                datepicker-options="dateOptions" 
+                                ng-required="true" 
+                                close-text="Close" />
+                              <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="openLoaded($event, v)" style="margin: 0; margin-left: -1px; height: 34px;"><i class="glyphicon glyphicon-calendar"></i></button>
+                              </span>
+                            </div>
+                            <span class="text-danger" ng-if="v.loaded_date.error">Please enter valid Loaded Date</span>
+                          </div>
+                          <div class="col-md-2" ng-show="v.container_number.show">
+                            <label class="form-label">Container Number <span class="text-danger text-bold text-lg" ng-if="v.container_number.validPattern.indexOf('required')>=0">*</span></label>
+                            <input 
+                              type="text" 
+                              class="form-control" 
+                              required 
+                              placeholder=""
+                              ng-model="v.container_number.value"
+                              ng-class="{ 'b-danger': v.container_number.error }" />
+                            <span class="text-danger" ng-if="v.container_number.error">Please enter valid Container Number</span>
+                          </div>
+                          <div class="col-md-2" ng-show="v.forwarder_id.show">
+                            <label class="form-label">Forwarder <span class="text-danger text-bold text-lg" ng-if="v.forwarder_id.validPattern.indexOf('required')>=0">*</span></label>
+                            <select ng-model="v.forwarder_id.value" required class="form-control" ng-options="vv.id as vv.item_name for vv in dropdowns.arrForwarders" ng-class="{ 'b-danger': v.forwarder_id.error }" ng-change="onChangeForwarder(v)">
+                              <option value="">-Select an Option</option>
+                            </select>
+                            <span class="text-danger" ng-if="v.forwarder_id.error">Please enter valid Forwarder</span>
+                          </div>
+                          <div class="col-md-2" ng-show="v.container_destination_arrival_date.show">
+                            <label class="form-label">Cont. Dest. Arrival Date <span class="text-danger text-bold text-lg" ng-if="v.container_destination_arrival_date.validPattern.indexOf('required')>=0">*</span></label>
+                            <div class="input-group w-sm">
+                              <input 
+                                type="text" 
+                                class="form-control" 
+                                datepicker-popup="{{formats}}" 
+                                clear-text="Clear"
+                                ng-model="v.container_destination_arrival_date.value" 
+                                is-open="v.openedDestArrival" 
+                                readonly="true" 
+                                datepicker-options="dateOptions" 
+                                ng-required="true" 
+                                close-text="Close" />
+                              <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="openDestArrival($event, v)" style="margin: 0; margin-left: -1px; height: 34px;">
+                                  <i class="glyphicon glyphicon-calendar"></i>
+                                </button>
+                              </span>
+                            </div>
+                            <span class="text-danger" ng-if="v.container_destination_arrival_date.error">Please enter valid Container Destination Arrival Date</span>
+                          </div>
+                          <div class="col-md-2" ng-show="v.box_status_id.show">
+                            <label class="form-label">Select a Box Status <span class="text-danger text-bold text-lg" ng-if="v.box_status_id.validPattern.indexOf('required')>=0">*</span></label>
+                            <select ng-model="v.box_status_id.value" required class="form-control" ng-options="vv.id as vv.item_name for vv in dropdowns.arrBoxStatus" ng-class="{ 'b-danger': v.box_status_id.error }" ng-change="onChangeBoxStatus(v)">
+                              <option value="">-Select an Option</option>
+                            </select>
+                            <span class="text-danger" ng-if="v.box_status_id.error">Please select a valid Box Status</span>
+                          </div>
+                        </div>
+                        <div class="row form-group">
+                          <!-- <div class="col-md-2" ng-show="v.quantity.show">
+                            <label class="form-label">Quantity <span class="text-danger text-bold text-lg" ng-if="v.quantity.validPattern.indexOf('required')>=0">*</span></label>
+                            <input 
+                              type="text" 
+                              class="form-control" 
+                              required 
+                              placeholder=""
+                              allow-only-rupees
+                              ng-model="v.quantity.value"
+                              ng-change="calcCBM(v)"
+                              ng-class="{ 'b-danger': v.quantity.error }" />
+                            <span class="text-danger" ng-if="v.quantity.error">Please enter valid Quantity</span>
+                          </div> -->
+                          <div class="col-md-2" ng-show="v.box_length.show">
+                            <label class="form-label">Box Length <span class="text-danger text-bold text-lg" ng-if="v.box_length.validPattern.indexOf('required')>=0">*</span></label>
+                            <input 
+                              type="text" 
+                              class="form-control" 
+                              required 
+                              placeholder=""
+                              allow-only-rupees
+                              ng-model="v.box_length.value"
+                              ng-change="calcCBM(v)"
+                              ng-class="{ 'b-danger': v.box_length.error }" />
+                            <span class="text-danger" ng-if="v.box_length.error">Please enter valid Box Length</span>
+                          </div>
+                          <div class="col-md-2" ng-show="v.box_breadth.show">
+                            <label class="form-label">Box Width <span class="text-danger text-bold text-lg" ng-if="v.box_breadth.validPattern.indexOf('required')>=0">*</span></label>
+                            <input 
+                              type="text" 
+                              class="form-control" 
+                              required 
+                              placeholder=""
+                              allow-only-rupees
+                              ng-model="v.box_breadth.value"
+                              ng-change="calcCBM(v)"
+                              ng-class="{ 'b-danger': v.box_breadth.error }" />
+                            <span class="text-danger" ng-if="v.box_breadth.error">Please enter valid Box Width</span>
+                          </div>
+                          <div class="col-md-2" ng-show="v.box_height.show">
+                            <label class="form-label">Box Height <span class="text-danger text-bold text-lg" ng-if="v.box_height.validPattern.indexOf('required')>=0">*</span></label>
+                            <input 
+                              type="text" 
+                              class="form-control" 
+                              required 
+                              placeholder=""
+                              allow-only-rupees
+                              ng-model="v.box_height.value"
+                              ng-change="calcCBM(v)"
+                              ng-class="{ 'b-danger': v.box_height.error }" />
+                              <span class="text-danger" ng-if="v.box_height.error">Please enter valid Box Height</span>
+                          </div>
+                          <div class="col-md-2" ng-show="v.cbm.show">
+                            <label class="form-label">CBM <span class="text-danger text-bold text-lg" ng-if="v.cbm.validPattern.indexOf('required')>=0">*</span></label>
+                            <input 
+                              type="text" 
+                              class="form-control" 
+                              required 
+                              placeholder=""
+                              disabled
+                              allow-only-rupees
+                              ng-model="v.cbm.value"
+                              ng-class="{ 'b-danger': v.cbm.error }" />
+                            <span class="text-danger" ng-if="v.cbm.error">Please enter valid Box CBM</span>
+                          </div>
+                          <div class="col-md-2" ng-show="v.is_box_descrapency.show">
+                            <label class="form-label">Box Descrapency <span class="text-danger text-bold text-lg" ng-if="v.is_box_descrapency.validPattern.indexOf('required')>=0">*</span></label>
+                            <div>
+                              <label for="is_box_descrapency_yes">
+                                <input type="radio" name="is_box_descrapency_yes" ng-model="v.is_box_descrapency.value" value="YES" />
+                                Yes
+                              </label>
+                              <label for="is_box_descrapency_no">
+                                <input type="radio" name="is_box_descrapency_no" ng-model="v.is_box_descrapency.value" value="NO" />
+                                No
+                              </label>
+                            </div>
+                            <span class="text-danger" ng-if="v.is_box_descrapency.error">Please enter valid Box Descrapency</span>
+                          </div>
+                        </div>
+                        <div class="row form-group">
+                          <div class="col-md-2" ng-show="v.package_type_id.show">
+                            <label class="form-label"> Select a Package Type <span class="text-danger text-bold text-lg" ng-if="v.package_type_id.validPattern.indexOf('required')>=0">*</span></label>
+                            <select ng-model="v.package_type_id.value" required class="form-control" ng-options="vv.id as vv.item_name for vv in dropdowns.arrPackageTypes" ng-class="{ 'b-danger': v.package_type_id.error }" ng-change="onChangePackageType(v)">
+                              <option value="">-Select an Option</option>
+                            </select>
+                            <span class="text-danger" ng-if="v.package_type_id.error">Please select a valid Package Type</span>
+                          </div>
+                          <div class="col-md-4" ng-show="v.notes.show">
+                            <label class="form-label">Description <span class="text-danger text-bold text-lg" ng-if="v.notes.validPattern.indexOf('required')>=0">*</span></label>
+                            <input 
+                              type="text" 
+                              class="form-control" 
+                              required 
+                              placeholder=""
+                              ng-model="v.notes.value"
+                              ng-class="{ 'b-danger': v.notes.error }" />
+                            <span class="text-danger" ng-if="v.notes.error">Please enter valid Box Description</span>
+                          </div>
+                          <div class="col-md-4" ng-show="v.upload_file.show">
+                            <br />
+                            <div>
+                              <input type="file" ngf-select ng-model="v.upload_file.value" name="upload_file" style="display: inline-block;" ngf-accept="'image/*'" accept="image/*" ngf-multiple="true" />
+                            </div>
+                            <b><small>Supported files: jpg, jpeg, png</small></b>
+                          </div>
+                          <div class="row col-md-2">
+                            <br />
+                            <button class="btn btn-danger btn-xs" tabindex="-1" ng-click="removeThisBox($event, $index)" ng-if="detailForm.length>1">
+                              <i class="fa fa-times"></i>
+                            </button>
+                            <button class="btn btn-success btn-xs" tabindex="-1" ng-if="$last" ng-click="addMoreBox()">
+                              <i class="fa fa-plus"></i> 
+                            </button>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label class="form-label">Uploaded Files</label>
+                          <div ng-if="v.file_path_json.value[0].length">
+                            <a href="{{vv}}" target="_blank" class="btn btn-xs btn-warning" ng-repeat="vv in v.file_path_json.value">View {{$index + 1}}</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="row form-group">
+                      <div class="col-md-3" ng-show="mainForm.destination_id.show">
+                        <label class="form-label"> Select a Destination <span class="text-danger text-bold text-lg" ng-if="mainForm.destination_id.validPattern.indexOf('required')>=0">*</span></label>
+                        <select ng-model="mainForm.destination_id.value" id="select_destination" required class="form-control" ng-options="v.id as v.item_name for v in dropdowns.arrDestinations" ng-class="{ 'b-danger': mainForm.destination_id.error }" ng-change="onChangeDestination()">
+                          <option value="">-Select an Option</option>
+                        </select>
+                        <span class="text-danger" ng-if="mainForm.destination_id.error">Please select a valid Destination</span>
+                      </div>
+                      <div class="col-md-3" ng-show="mainForm.port_id.show">
+                        <label class="form-label"> Select a Port <span class="text-danger text-bold text-lg" ng-if="mainForm.port_id.validPattern.indexOf('required')>=0">*</span></label>
+                        <select ng-model="mainForm.port_id.value" id="select_port" required class="form-control" ng-options="v.id as v.item_name for v in dropdowns.arrPorts" ng-class="{ 'b-danger': mainForm.port_id.error }" ng-change="onChangePort()">
+                          <option value="">-Select an Option</option>
+                        </select>
+                        <span class="text-danger" ng-if="mainForm.port_id.error">Please select a valid Port</span>
+                      </div>
+                    </div>
+                    <div class="row form-group">
+                      <div class="col-md-6">
+                        <div class="form-group" ng-show="mainForm.consignee_name.show">
+                          <label class="form-label">Consignee Name <span class="text-danger text-bold text-lg" ng-if="mainForm.consignee_name.validPattern.indexOf('required')>=0">*</span></label>
+                          <input 
+                            type="text" 
+                            class="form-control" 
+                            required 
+                            placeholder=""
+                            ng-model="mainForm.consignee_name.value"
+                            ng-class="{ 'b-danger': mainForm.consignee_name.error }" />
+                          <span class="text-danger" ng-if="mainForm.consignee_name.error">Please enter valid Consignee Name</span>
+                        </div>
+                        <div class="form-group" ng-show="mainForm.consignee_address.show">
+                          <label class="form-label">Consignee Address <span class="text-danger text-bold text-lg" ng-if="mainForm.consignee_address.validPattern.indexOf('required')>=0">*</span></label>
+                          <textarea class="form-control" ng-model="mainForm.consignee_address.value" ng-class="{ 'b-danger': mainForm.consignee_address.error }"></textarea>
+                          <span class="text-danger" ng-if="mainForm.consignee_address.error">Please enter valid Consignee Address</span>
+                        </div>
+                        <div class="form-group" ng-show="mainForm.consignee_phone_number.show">
+                          <label class="form-label">Consignee Phone Number <span class="text-danger text-bold text-lg" ng-if="mainForm.consignee_phone_number.validPattern.indexOf('required')>=0">*</span></label>
+                          <input 
+                            type="text" 
+                            class="form-control" 
+                            required 
+                            placeholder=""
+                            ng-model="mainForm.consignee_phone_number.value"
+                            ng-class="{ 'b-danger': mainForm.consignee_phone_number.error }" />
+                          <span class="text-danger" ng-if="mainForm.consignee_phone_number.error">Please enter valid Consignee Phone Number</span>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group" ng-show="mainForm.supplier_name.show">
+                          <label class="form-label">Shipper Name <span class="text-danger text-bold text-lg" ng-if="mainForm.supplier_name.validPattern.indexOf('required')>=0">*</span></label>
+                          <input 
+                            type="text" 
+                            class="form-control" 
+                            required 
+                            placeholder=""
+                            ng-model="mainForm.supplier_name.value"
+                            ng-class="{ 'b-danger': mainForm.supplier_name.error }" />
+                          <span class="text-danger" ng-if="mainForm.supplier_name.error">Please select a valid Shipper</span>
+                        </div>
+                        <div class="form-group" ng-show="mainForm.supplier_address.show">
+                          <label class="form-label">Shipper Address <span class="text-danger text-bold text-lg" ng-if="mainForm.supplier_address.validPattern.indexOf('required')>=0">*</span></label>
+                          <textarea class="form-control" ng-model="mainForm.supplier_address.value" ng-class="{ 'b-danger': mainForm.supplier_address.error }"></textarea>
+                          <span class="text-danger" ng-if="mainForm.supplier_address.error">Please enter valid Shipper Address</span>
+                        </div>
+                        <div class="form-group" ng-show="mainForm.supplier_phone_number.show">
+                          <label class="form-label">Shipper Phone Number <span class="text-danger text-bold text-lg" ng-if="mainForm.supplier_phone_number.validPattern.indexOf('required')>=0">*</span></label>
+                          <input 
+                            type="text" 
+                            class="form-control" 
+                            required 
+                            placeholder=""
+                            ng-model="mainForm.supplier_phone_number.value"
+                            ng-class="{ 'b-danger': mainForm.supplier_phone_number.error }" />
+                          <span class="text-danger" ng-if="mainForm.supplier_phone_number.error">Please enter valid Shipper Phone Number</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row form-group">
+                      <div class="col-md-2">
+                        <label class="form-label">Cash Amount (KD) <span class="text-danger text-bold text-lg" ng-if="mainForm.cash_amount.validPattern.indexOf('required')>=0">*</span></label>
+                        <input 
+                          type="text" 
+                          class="form-control text-right" 
+                          required 
+                          placeholder=""
+                          ng-model="mainForm.cash_amount.value"
+                          ng-change="onChangeCalcTotalAmount()"
+                          ng-class="{ 'b-danger': mainForm.cash_amount.error }" />
+                        <span class="text-danger" ng-if="mainForm.cash_amount.error">Please enter valid Cash Amount</span>
+                      </div>
+                      <div class="col-md-2">
+                        <label class="form-label">Credit Amount (KD) <span class="text-danger text-bold text-lg" ng-if="mainForm.credit_amount.validPattern.indexOf('required')>=0">*</span></label>
+                        <input 
+                          type="text" 
+                          class="form-control text-right" 
+                          required 
+                          placeholder=""
+                          ng-model="mainForm.credit_amount.value"
+                          ng-change="onChangeCalcTotalAmount()"
+                          ng-class="{ 'b-danger': mainForm.credit_amount.error }" />
+                        <span class="text-danger" ng-if="mainForm.credit_amount.error">Please enter valid Credit Amount</span>
+                      </div>
+                      <div class="col-md-2">
+                        <label class="form-label">Invoice Total Amount (KD) <span class="text-danger text-bold text-lg" ng-if="mainForm.invoice_total_amount.validPattern.indexOf('required')>=0">*</span></label>
+                        <input 
+                          type="text" 
+                          class="form-control text-right" 
+                          required 
+                          placeholder=""
+                          disabled="" 
+                          ng-model="mainForm.invoice_total_amount.value"
+                          ng-class="{ 'b-danger': mainForm.invoice_total_amount.error }" />
+                        <span class="text-danger" ng-if="mainForm.invoice_total_amount.error">Please enter valid Invoice Total Amount</span>
+                      </div>
+                      <div class="col-md-2">
+                        <label class="form-label">Receipt Number <span class="text-danger text-bold text-lg" ng-if="mainForm.receipt_number.validPattern.indexOf('required')>=0">*</span></label>
+                        <input 
+                          type="text" 
+                          class="form-control text-right" 
+                          required 
+                          placeholder=""
+                          ng-model="mainForm.receipt_number.value"
+                          ng-class="{ 'b-danger': mainForm.receipt_number.error }" />
+                        <span class="text-danger" ng-if="mainForm.receipt_number.error">Please enter valid Receipt Number</span>
+                      </div>
+                      <div class="col-md-2" ng-show="mainForm.next_payment_reminder.show">
+                        <label class="form-label">Next Payment Reminder Date <span class="text-danger text-bold text-lg" ng-if="mainForm.next_payment_reminder.validPattern.indexOf('required')>=0">*</span></label>
+                        <div class="input-group w-sm">
+                          <input 
+                            type="text" 
+                            class="form-control" 
+                            datepicker-popup="{{formats}}" 
+                            ng-model="mainForm.next_payment_reminder.value" 
+                            is-open="openedReminder" 
+                            readonly="true" 
+                            datepicker-options="dateOptions" 
+                            ng-required="true" 
+                            close-text="Close" />
+                          <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="openReminder($event)" style="margin: 0; margin-left: -1px; height: 34px;"><i class="glyphicon glyphicon-calendar"></i></button>
+                          </span>
+                        </div>
+                        <span class="text-danger" ng-if="mainForm.next_payment_reminder.error">Please enter valid Reminder Date</span>
+                      </div>
+                    </div>
+                    <div class="row form-group">
+                      <div class="col-md-2" ng-show="mainForm.sales_agent_id.show">
+                        <label class="form-label">Select a Sales Agent <span class="text-danger text-bold text-lg" ng-if="mainForm.sales_agent_id.validPattern.indexOf('required')>=0">*</span></label>
+                        <select ng-model="mainForm.sales_agent_id.value" id="select_sales_agent" required class="form-control" ng-options="v.id as v.full_name for v in dropdowns.arrSalesAgents" ng-class="{ 'b-danger': mainForm.sales_agent_id.error }" ng-change="onChangeSalesAgent()">
+                          <option value="">-Select an Option</option>
+                        </select>
+                        <span class="text-danger" ng-if="mainForm.sales_agent_id.error">Please select a valid Sales Agent</span>
+                      </div>
+                      <div class="col-md-2" ng-show="mainForm.driver_id.show">
+                        <label class="form-label">Driver <span class="text-danger text-bold text-lg" ng-if="mainForm.driver_id.validPattern.indexOf('required')>=0">*</span></label>
+                        <select ng-model="mainForm.driver_id.value" id="select_driver" required class="form-control" ng-options="v.id as v.full_name for v in dropdowns.arrDrivers" ng-class="{ 'b-danger': mainForm.driver_id.error }" ng-change="onChangeDriver()">
+                          <option value="">-Select an Option</option>
+                        </select>
+                        <span class="text-danger" ng-if="mainForm.driver_id.error">Please select a valid Driver</span>
+                      </div>
+                    </div>
+                    <!-- <div class="row form-group">
+                      <div class="col-md-12 section-border">
+                        <div class="form-group">
+                          <label class="form-label">Notes <span class="text-danger text-bold text-lg" ng-if="mainForm.notes.validPattern.indexOf('required')>=0">*</span></label>
+                          <textarea class="form-control" ng-model="mainForm.notes.value"></textarea>
+                          <span class="text-danger" ng-if="mainForm.notes.error">Please enter valid Notes</span>
+                        </div>
+                      </div>
+                    </div> -->
+                    <div class="clearfix"></div>
+                    <hr />
+                    <div class="form-group pull-right">
+                      <button ng-click="clearState()" ng-ifs="!mainForm.id.value" ng-if="stateParams.t == 'n'" class="btn" tabindex="-1">Clear</button>
+                      <!--<button ng-click="clearState()" ng-if="mainForm.id.value" class="btn" tabindex="-1">Cancel</button>-->
+                      <button ng-click="askForConfirm()" class="btn btn-primary">Save</button>
+                    </div>
+                  </div>
+                  <div class="col-md-12 section-border" ng-show="show_section=='PREVIEW'">
+                    <h4>Confirm the entered fields or Go Back to edit</h4>
+                    <div class="form-group">
+                      <div ng-if="mainForm.pick_up_date.value">Pickup Date: <b>{{ mainForm.pick_up_date.value  | momentFltr:'moment': 'DD-MM-YYYY'}}</b> </div>
+                      <div ng-if="mainForm.invoice_number.value">Invoice Number <b> {{ mainForm.invoice_number.value }} </b></div>
+                      <div ng-repeat="v in detailForm" style="border: 1px solid #eee; padding: 10px;">
+                        <div style="font-weight: 600;"> Details {{ $index + 1 }}</div>
+                        <div ng-if="v.tracking_number.value">Tracking Number: <b>{{v.tracking_number.value}}</b></div>
+                        <div ng-if="v.loaded_date.value">Loaded Date: <b>{{v.loaded_date.value | momentFltr:'moment': 'DD-MM-YYYY'}}</b></div>
+                        <div ng-if="v.container_number.value">Container Number: <b>{{v.container_number.value}}</b></div>
+                        <div ng-if="v.forwarder_id.value">Forwarder: <b>{{v.forwarder_name.value}}</b></div>
+                        <div ng-if="v.container_destination_arrival_date.value">Cont. Dest. Arrival Date: <b>{{v.container_destination_arrival_date.value | momentFltr:'moment': 'DD-MM-YYYY'}}</b></div>
+                        <div ng-if="v.box_status_id.value">Box Status: <b>{{v.box_status_name.value}}</b></div>
+                        <div ng-if="v.quantity.value">Quantity: <b>{{v.quantity.value}}</b></div>
+                        <div ng-if="v.box_length.value">Box Length: <b>{{v.box_length.value}}</b></div>
+                        <div ng-if="v.box_breadth.value">Box Width: <b>{{v.box_breadth.value}}</b></div>
+                        <div ng-if="v.box_height.value">Box Height: <b>{{v.box_height.value}}</b></div>
+                        <div ng-if="v.cbm.value">CBM: <b>{{v.cbm.value}}</b></div>
+                        <div ng-if="v.is_box_descrapency.value"> Box Descrapency <b>{{v.is_box_descrapency.value}}</b></div>
+                        <div ng-if="v.notes.value">Description: <b>{{v.notes.value}}</b></div>
+                        <div ng-if="v.package_type_id.value"> Package Type <b>{{v.package_type_name.value}}</b></div>
+                      </div>
+                      <div ng-if="mainForm.destination_id.value"> Destination <b>{{mainForm.destination_name.value}}</b></div>
+                      <div ng-if="mainForm.port_id.value"> Port <b>{{mainForm.port_name.value}}</b></div>
+                      <div ng-if="mainForm.consignee_name.value"> Consignee Name <b>{{mainForm.consignee_name.value}}</b></div>
+                      <div ng-if="mainForm.consignee_phone_number.value"> Consignee Phone Number <b>{{mainForm.consignee_phone_number.value}}</b></div>
+                      <div ng-if="mainForm.consignee_address.value"> Consignee Address <b>{{mainForm.consignee_address.value}}</b></div>
+                      <div ng-if="mainForm.supplier_name.value"> Shipper Name <b>{{mainForm.supplier_name.value}}</b></div>
+                      <div ng-if="mainForm.supplier_phone_number.value"> Shipper Phone Number <b>{{mainForm.supplier_phone_number.value}}</b></div>
+                      <div ng-if="mainForm.supplier_address.value"> Shipper Address <b>{{mainForm.supplier_address.value}}</b></div>
+                      <div ng-if="mainForm.cash_amount.value"> Cash Amount (KD) <b>{{mainForm.cash_amount.value}}</b></div>
+                      <div ng-if="mainForm.credit_amount.value"> Credit Amount (KD) <b>{{mainForm.credit_amount.value}}</b></div>
+                      <div ng-if="mainForm.invoice_total_amount.value"> Invoice Total Amount (KD) <b>{{mainForm.invoice_total_amount.value}}</b></div>
+                      <div ng-if="mainForm.sales_agent_id.value"> Sales Agent <b>{{mainForm.sales_agent_name.value}}</b></div>
+                      <div ng-if="mainForm.driver_id.value"> Driver <b>{{mainForm.driver_name.value}}</b></div>
+                      <div ng-if="mainForm.notes.value"> Notes <b>{{mainForm.notes.value}}</b></div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr />
+                    <div class="form-group pull-right">
+                      <button ng-click="goBackToEdit()" class="btn" tabindex="-1">Go Back</button>
+                      <button ng-click="submitForm()" class="btn btn-primary">Confirm</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /column -->
+</div>
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<!-- /hbox layout -->

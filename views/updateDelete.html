@@ -1,0 +1,147 @@
+<!-- hbox layout -->
+<div class="hbox hbox-auto-xs bg-light" ng-controller="updateDeleteController">
+  <!-- column -->
+  <div class="col">
+    <div class="vbox">
+      <div class="wrapper bg-light lt b-b">
+        <span class="font-bold">Payment Management</span>
+      </div>
+      <div class="row-row">
+        <div class="wrapper">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="panel panel-default">
+                <div class="panel-body">
+                  <div class="col-md-12">
+                    <h4>Payment Deletes</h4>
+                    <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Invoice Number</th>
+                          <th>Receipt Number</th>
+                          <th>Payment Mode</th>
+                          <th>Entered Date</th>
+                          <th>Paid Date</th>
+                          <th>Paid Amount (KD)</th>
+                          <th>Notes</th>
+                          <th>Deleted By</th>
+                          <th>Deleted At</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr ng-repeat="v in deletes" ng-class="{'bg-warning': v.status==2}">
+                          <td>{{ $index + 1 }}</td>
+                          <td>{{ v.invoice_number }}</td>
+                          <td>{{ v.receipt_number }}</td>
+                          <td>{{ v.payment_mode_data.name }}</td>
+                          <td>{{ v.entered_date | momentFltr: 'YYYY-MM-DD': 'DD-MM-YYYY' }}</td>
+                          <td>{{ v.paid_date | momentFltr: 'YYYY-MM-DD': 'DD-MM-YYYY' }}</td>
+                          <td class="text-right">{{ v.paid_amount }}</td>
+                          <td>{{ v.notes }}</td>
+                          <td>{{ v.updated_by_data.name }}</td>
+                          <td>{{ v.updated_at | momentFltr: 'YYYY-MM-DD': 'DD-MM-YYYY'}}</td>
+                        </tr>
+                        <tr ng-if="!deletes.length">
+                          <td colspan="10">No Data Available</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="panel panel-default">
+                <div class="panel-body">
+                  <div class="col-md-12">
+                    <h4>Invoice Updates</h4>
+                    <div class="col-md-12" style="height: 800px;">
+                      <div class="table-responsives">
+                        <table class="table table-bordered table-striped table-hover nowrap" id="bt_table">
+                          <thead>
+                            <tr>
+                              <th style="background-color: #fff">Updated By</th>
+                              <th style="background-color: #fff">Updated At</th>
+                              <th style="background-color: #fff">Pickup Date</th>
+                              <th style="background-color: #fff">Invoice Number</th>
+                              <th style="background-color: #fff">Tracking Number</th>
+                              <th style="background-color: #fff">Loaded Date</th>
+                              <th style="background-color: #fff">Container Number</th>
+                              <th style="background-color: #fff">Forwarder</th>
+                              <th style="background-color: #fff">Cont. Dest. Arrival Date</th>
+                              <th style="background-color: #fff">Box Status</th>
+                              <th style="background-color: #fff">Box (L x W x H) = CBM</th>
+                              <th style="background-color: #fff">Package Type</th>
+                              <th style="background-color: #fff">Box Descrapency</th>
+                              <th style="background-color: #fff">Destination</th>
+                              <th style="background-color: #fff">Port</th>
+                              <th style="background-color: #fff">Consignee Details</th>
+                              <th style="background-color: #fff">Shipper Details</th>
+                              <th style="background-color: #fff">Sales Agent</th>
+                              <th style="background-color: #fff">Driver</th>
+                              <th style="background-color: #fff">Cash Amount</th>
+                              <th style="background-color: #fff">Credit Amount</th>
+                              <th style="background-color: #fff">Total Amount</th>
+                              <th style="background-color: #fff">Notes</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr ng-repeat="v in tableData">
+                              <td>{{ v.updated_by_data.name }}</td>
+                              <td>{{ v.updated_at | momentFltr:'YYYY-MM-DD':'DD-MM-YYYY' }}</td>
+                              <td>{{ v.pick_up_date | momentFltr:'YYYY-MM-DD':'DD-MM-YYYY' }}</td>
+                              <td>{{ v.invoice_number }}</td>
+                              <td>{{ v.tracking_number }}</td>
+                              <td>{{ v.loaded_date | momentFltr:'YYYY-MM-DD':'DD-MM-YYYY' }}</td>
+                              <td>{{ v.container_number }}</td>
+                              <td>{{ v.forwarder }}</td>
+                              <td>{{ v.container_destination_arrival_date | momentFltr:'YYYY-MM-DD':'DD-MM-YYYY' }}</td>
+                              <td>{{ v.box_status_data.name }}</td>
+                              <td>{{ v.box_length + ' x ' + v.box_breadth + ' x ' + v.box_height + ' = ' + v.cbm }}</td>
+                              <td>{{ v.package_type_data.name }}</td>
+                              <td>{{ v.is_box_descrapency }}</td>
+                              <td>{{ v.destination_data.name }}</td>
+                              <td>{{ v.port_data.name }}</td>
+                              <td>
+                                <div><b>{{ v.consignee_name }}</b></div>
+                                <div>{{ v.consignee_address }}</div>
+                                <div>{{ v.consignee_phone_number }}</div>
+                              </td>
+                              <td>
+                                <div><b>{{ v.supplier_name }}</b></div>
+                                <div>{{ v.supplier_address }}</div>
+                                <div>{{ v.supplier_phone_number }}</div>
+                              </td>
+                              <td>{{ v.sales_agent_data.name }}</td>
+                              <td>{{ v.driver_data.name }}</td>
+                              <td class="text-right">{{ v.cash_amount }}</td>
+                              <td class="text-right">{{ v.credit_amount }}</td>
+                              <td class="text-right">{{ v.invoice_total_amount }}</td>
+                              <td>{{ v.notes }}</td>
+                            </tr>
+                            <tr ng-if="!tableData.length">
+                              <td colspan="22">No Data Available</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /column -->
+</div>
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<!-- /hbox layout -->

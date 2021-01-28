@@ -1,0 +1,189 @@
+<!-- hbox layout -->
+<br />
+<br />
+
+<div class="hbox hbox-auto-xs bg-light" ng-controller="reviewMgmtControllers">
+    <div class="col-md-12">
+        <div class="col-md-9">
+            <div class="table-responsives">
+                <table class="table table-bordered table-striped table-hover nowrap" id="bt_review_table">
+                  <thead>
+                    <tr>
+                      <th style="background-color: #fff">Actions</th>
+                      <th style="background-color: #fff">All Status</th>
+                      <th style="background-color: #fff">Invoice Number</th>
+                      <th style="background-color: #fff">Tracking Number</th>
+                      <th style="background-color: #fff">Forwarder</th>
+                      <th style="background-color: #fff">CBM</th>
+                      <th style="background-color: #fff">Package Type</th>
+                      <th style="background-color: #fff">Consignee Name</th>
+                      <th style="background-color: #fff">Consignee Phone Number</th>
+                      <th style="background-color: #fff">Consignee Address</th>
+                      <th style="background-color: #fff">Shipper Name</th>
+                      <th style="background-color: #fff">Shipper Phone Number</th>
+                      <th style="background-color: #fff">Shipper Address</th>
+                      <th style="background-color: #fff">Sales Agent</th>
+                    </tr>
+                  </thead>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-3" ng-if="false">
+            <h4>Box Status Updating (Box Unique Number: {{mainForm.invoice_number.value +'/'+boxDetails.trackingDetails.box_unique_number}})</h4>
+            <div class="form-group col-md-12">
+              <label class="control-label">Invoice Number <span class="text-danger text-bold text-lg">*</span></label>
+              <input type="text" class="form-control" ng-model="mainForm.invoice_number.value" disabled="" />
+              <span class="text-danger" ng-if="mainForm.invoice_number.error">Please enter valid Invoice Number</span>
+            </div>
+            <div class="form-group col-md-12">
+              <label class="control-label">Box Tracking Number <span class="text-danger text-bold text-lg">*</span></label>
+              <input type="text" class="form-control" ng-model="mainForm.tracking_number.value" disabled="" />
+              <span class="text-danger" ng-if="mainForm.tracking_number.error">Please enter valid Box Tracking Number</span>
+            </div>
+            <div class="form-group col-md-12">
+              <label class="control-label">Recent Updated Box Status</label>
+              <input type="text" class="form-control" ng-model="mainForm.recent_updated_status.value" disabled="" />
+            </div>
+            <div class="form-group col-md-12">
+              <label class="control-label">New Box Status Date <span class="text-danger text-bold text-lg">*</span></label>
+              <div class="input-group w-sm">
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  datepicker-popup="{{formats}}" 
+                  ng-model="mainForm.box_status_date.value" 
+                  is-open="opened" 
+                  readonly="true" 
+                  datepicker-options="dateOptions" 
+                  ng-required="true" 
+                  close-text="Close" />
+                <span class="input-group-btn">
+                  <button type="button" class="btn btn-default" ng-click="openBoxStatusDate($event)" style="margin: 0; margin-left: -1px; height: 34px;">
+                    <i class="glyphicon glyphicon-calendar"></i>
+                  </button>
+                </span>
+              </div>
+              <span class="text-danger" ng-if="mainForm.box_status_date.error">Please enter valid New Box Status Date</span>
+            </div>
+            <div class="form-group col-md-12">
+              <label class="control-label">New Box Status <span class="text-danger text-bold text-lg">*</span></label>
+              <select ng-model="mainForm.box_status_id.value" class="form-control" ng-options="v.id as v.item_name for v in arrBoxStatus">
+              </select>
+              <span class="text-danger" ng-if="mainForm.box_status_id.error">Please enter valid New Box Status</span>
+            </div>
+            <!--<div class="form-group col-md-12" ng-if="mainForm.box_status_id.value==39">-->
+            <!--  <label class="control-label">Review Priority <span class="text-danger text-bold text-lg">*</span></label>-->
+            <!--  <select ng-model="mainForm.review_priority.value" class="form-control" ng-options="v as v for v in [1, 2, 3]">-->
+            <!--  </select>-->
+            <!--  <span class="text-danger" ng-if="mainForm.review_priority.error">Please enter valid Review Priority</span>-->
+            <!--</div>-->
+            <div class="form-group col-md-12" ng-if="mainForm.box_status_id.value == 33 || mainForm.box_status_id.value == 34">
+              <label class="control-label">Custom Box Status <span class="text-danger text-bold text-lg">*</span></label>
+              <input type="text" class="form-control" ng-model="mainForm.box_status_free_text.value" />
+              <span class="text-danger" ng-if="mainForm.box_status_free_text.error">Please enter valid Custom Box Status</span>
+            </div>
+            <div class="form-group" ng-if="mainForm.id.value">
+              <button class="btn btn-primary btn-block" ng-click="onSubmitAsYesterdayMainForm()">Same as Yesterday</button>
+              <button class="btn btn-default btn-block" ng-click="onClearMainForm()">Cancel</button>
+              <button class="btn btn-primary btn-block" ng-click="onSubmitMainForm()">Save</button>
+            </div>
+            <!-- <div class="form-group" ng-if="mainForm.id.value">
+              <button class="btn btn-warning" ng-click="onSubmitMarkReviewManagement()">Mark for Review Mgmt.</button>
+            </div> -->
+        </div>
+        <div class="col-md-3">
+            <h4>Chat Window</h4>
+            <h4>(Box Unique Number: {{mainForm.invoice_number.value +'/'+boxDetails.trackingDetails.box_unique_number}})</h4>
+            <div class="row form-group col-md-12">
+                <div class="chart-window" style="height: 400px; min-height: 400px; max-height: 400px; overflow: auto; border: 1px solid #000; background: #fff;">
+                    <div 
+                        class="bg-info" 
+                        ng-repeat="v in boxDetails.boxStatusDetails | orderBy: 'id'" 
+                        ng-if="[49, 50, 51, 52].indexOf(v.box_status_id * 1)>=0"
+                        style="margin: 8px; padding: 8px; border-radius: 4px;"
+                    >
+                        <p>{{v.box_status_free_text}}</p>
+                        <p class="text-right">{{v.box_status_date | momentFltr: 'YYYY-MM-DD': 'DD/MM/YYYY'}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row col-md-12">
+                <input type="text" class="form-control" ng-model="mainForm.box_status_free_text.value" />
+            </div>
+            <div class="row col-md-12">
+                <button class="btn btn-primary btn-block" ng-click="onSubmitMainForm()">Send</button>
+                <!--<button class="btn btn-warning btn-block">Mark yellow & send</button>-->
+            </div>
+            <!--<div class="row form-group col-md-12">-->
+            <!--    <label class="control-label">New Box Status Date <span class="text-danger text-bold text-lg">*</span></label>-->
+            <!--    <div class="input-group w-sm">-->
+            <!--        <input -->
+            <!--          type="text" -->
+            <!--          class="form-control" -->
+            <!--          datepicker-popup="{{formats}}" -->
+            <!--          ng-model="mainForm.box_status_date.value" -->
+            <!--          is-open="opened" -->
+            <!--          readonly="true" -->
+            <!--          datepicker-options="dateOptions" -->
+            <!--          ng-required="true" -->
+            <!--          close-text="Close" />-->
+            <!--        <span class="input-group-btn">-->
+            <!--          <button type="button" class="btn btn-default" ng-click="openBoxStatusDate($event)" style="margin: 0; margin-left: -1px; height: 34px;">-->
+            <!--            <i class="glyphicon glyphicon-calendar"></i>-->
+            <!--          </button>-->
+            <!--        </span>-->
+            <!--    </div>-->
+            <!--    <span class="text-danger" ng-if="mainForm.box_status_date.error">Please enter valid New Box Status Date</span>-->
+            <!--</div>-->
+            <!--<div class="row form-group col-md-12">-->
+            <!--    <label class="control-label">New Box Status <span class="text-danger text-bold text-lg">*</span></label>-->
+            <!--    <select ng-model="mainForm.box_status_id.value" class="form-control" ng-options="v.id as v.item_name for v in arrBoxStatus">-->
+            <!--    </select>-->
+            <!--    <span class="text-danger" ng-if="mainForm.box_status_id.error">Please enter valid New Box Status</span>-->
+            <!--</div>-->
+            <!--<div class="row form-group" ng-if="mainForm.id.value">-->
+            <!--  <button class="btn btn-primary btn-block" ng-click="onSubmitAsYesterdayMainForm()">Same as Yesterday</button>-->
+            <!--  <button class="btn btn-default btn-block" ng-click="onClearMainForm()">Cancel</button>-->
+            <!--  <button class="btn btn-primary btn-block" ng-click="onSubmitMainForm()">Save</button>-->
+            <!--</div>-->
+        </div>
+    </div>
+  <script type="text/ng-template" id="invoiceStatusModal.html">
+    <div>
+        <div class="modal-header">
+            <h3 class="modal-title">All Status</h3>
+        </div>
+        <div class="modal-body">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Day Difference</th>
+                    </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="(k, v) in boxDetails.boxStatusDetails">
+                      <td>{{$index + 1}}</td>
+                      <td><b>{{v.box_status_name}}</b> {{ v.box_status_free_text}}</td>
+                      <td class="text-nowrap">{{v.box_status_date | momentFltr:'YYYY-MM-DD': 'DD-MM-YYYY'}}</td>
+                      <td>{{boxDetails.boxStatusDetails[k-1].box_status_date && v.box_status_date ? (boxDetails.boxStatusDetails[k-1].box_status_date | diffDates: v.box_status_date) + ' days' : ''}}</td>
+                  </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="modal-footer">                  
+            <button class="btn btn-primary" ng-click="ok()">OK</button>
+        </div>
+    </div>
+  </script>
+</div>
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<!-- /hbox layout -->
+

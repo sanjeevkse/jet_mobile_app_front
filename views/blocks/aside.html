@@ -1,0 +1,15 @@
+<div class="aside-wrap">
+  <!-- if you want to use a custom scroll when aside fixed, use the slimScroll
+    <div class="navi-wrap" ui-jq="slimScroll" ui-options="{height:'100%', size:'8px'}">
+  -->
+  <div class="navi-wrap">
+    <div class="col-md-12" ng-if="toState.name == 'app.newBoxTracking'">
+      <img src="images/{{selectedFirm.logo_link}}" style="z-index: 9;" alt="." class="col-md-12">
+    </div>
+    <div class="clearfix"></div>
+    <!-- nav -->
+    <nav ui-nav class="navi clearfix" ng-include="'views/blocks/nav.html'"></nav>
+    <!-- nav -->
+
+  </div>
+</div>

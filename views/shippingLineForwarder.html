@@ -1,0 +1,343 @@
+<!-- hbox layout -->
+<div class="hbox hbox-auto-xs bg-light" ng-controller="shippingLineForwarderController">
+  <!-- column -->
+  <div class="col">
+    <div class="vbox">
+      <div class="wrapper bg-light lt b-b">
+        <span class="font-bold" ng-if="!mainForm.id.value">New Entry</span>
+        <span class="font-bold" ng-if="!!mainForm.id.value">Updating <b>{{::mainForm.item_name.value}} ...</b></span>
+        <div class="m-l inline dropdown" dropdown>
+          <a class="v-middle pos-rlt inline bg-{{note.color}}" dropdown-toggle style="width:16px;height:16px;top:-2px"></a>
+          <div class="dropdown-menu animated fadeInUp w wrapper">
+            <a ng-repeat="color in colors" class="inline m-xs bg-{{color}}" style="width:18px;height:18px" ng-click=" note.color = color "></a>
+          </div>
+        </div>
+      </div>
+      <div class="row-row">
+        <!-- <div class="wrapper">
+          <div class="row"> 
+            <div class="col-md-12">
+              <div class="panel panel-default">
+                <div class="panel-body">
+                  <div class="form-group clearfix" ng-show="is_exapanded">
+                    <div ng-repeat="(k, v) in mainForm" class="" style="display: inline-block; margin: 4px; padding: 1px 14px; border: 1px solid #eee;" ng-class="{'bg-light-success': v.show}" ng-if="v.dispText" for="ck_{{k}}">
+                      <div class="checkbox">
+                        <label class="i-checks" style="padding-left: 0;">
+                          <input type="checkbox" ng-change="onChangeField(k, v)" class="hidden" ng-model="v.show"><i class="hidden"></i> {{ v.dispText }}
+                        </label>
+                      </div>
+                    </div>
+                    <div ng-repeat="(k, v) in detailForm[0]" class="" style="display: inline-block; margin: 4px; padding: 1px 14px; border: 1px solid #eee;" ng-class="{'bg-light-success': v.show}" ng-if="v.dispText" for="ck_{{k}}">
+                      <div class="checkbox">
+                        <label class="i-checks" style="padding-left: 0;">
+                          <input type="checkbox" ng-change="onChangeDetailField(k, v)" class="hidden" ng-model="v.show"><i class="hidden"></i> {{ v.dispText }}
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-md-12">
+                      <button class="pull-right btn btn-xs btn-warning" ng-show="is_exapanded" ng-click="is_exapanded=false">Collapse</button>
+                      <button class="pull-right btn btn-xs btn-warning" ng-show="!is_exapanded" ng-click="is_exapanded=true">Expand</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> -->
+        <div class="wrapper">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="panel panel-default">
+                <div class="panel-body">
+                  <div class="form-group" ng-if="mainForm.id.value">
+                    <span class="badge bg-info"> Editing </span>
+                  </div>
+                  <div class="clearfix"></div>
+                  <div class="col-md-12 section-border" ng-show="show_section=='FORM'">
+                    <div class="row form-group">
+                      <div class="col-md-2">
+                        <label class="form-label">Container Number <span class="text-danger text-bold text-lg" ng-if="mainForm.container_number.validPattern.indexOf('required')>=0">*</span></label>
+                        <input 
+                          type="text" 
+                          class="form-control" 
+                          required 
+                          placeholder=""
+                          id="container_number"
+                          ng-blur="onBlurContainerNumber()"
+                          ng-model="mainForm.container_number.value"
+                          ng-class="{ 'b-danger': mainForm.container_number.error }" />
+                        <span class="text-danger" ng-if="mainForm.container_number.error">Please enter valid Container Number</span>
+                      </div>
+                      <div class="col-md-2">
+                        <label class="form-label">BL Number <span class="text-danger text-bold text-lg" ng-if="mainForm.billing_number.validPattern.indexOf('required')>=0">*</span></label>
+                        <input 
+                          type="text" 
+                          class="form-control" 
+                          required 
+                          placeholder=""
+                          ng-model="mainForm.billing_number.value"
+                          ng-class="{ 'b-danger': mainForm.billing_number.error }" />
+                        <span class="text-danger" ng-if="mainForm.billing_number.error">Please enter valid BL Number</span>
+                      </div>
+                      <div class="col-md-2">
+                        <label class="form-label">Location </label>
+                        <input 
+                          type="text" 
+                          class="form-control" 
+                          required 
+                          disabled="" 
+                          placeholder=""
+                          ng-model="mainForm.location_name.value"
+                          ng-class="{ 'b-danger': mainForm.location_name.error }" />
+                        <span class="text-danger" ng-if="mainForm.location_name.error">Please enter valid Location</span>
+                      </div>
+                      <div class="col-md-2">
+                        <label class="form-label">Loaded Date </label>
+                        <input 
+                          type="text" 
+                          class="form-control" 
+                          required 
+                          disabled="" 
+                          ng-change="onChangeLoadedDate()"
+                          placeholder=""
+                          ng-model="mainForm.loaded_date.value"
+                          ng-class="{ 'b-danger': mainForm.loaded_date.error }" />
+                        <span class="text-danger" ng-if="mainForm.loaded_date.error">Please enter valid Loaded Date</span>
+                      </div>
+                      <div class="col-md-2">
+                        <label class="form-label">ETA <span class="text-danger text-bold text-lg" ng-if="mainForm.estimated_arrival_date.validPattern.indexOf('required')>=0">*</span></label>
+                        <div class="input-group w-sm">
+                          <input 
+                            type="text" 
+                            class="form-control" 
+                            datepicker-popup="{{formats}}" 
+                            ng-model="mainForm.estimated_arrival_date.value" 
+                            is-open="openedETA" 
+                            readonly="true" 
+                            ng-change="onChangeETA()"
+                            datepicker-options="dateOptions" 
+                            ng-required="true" 
+                            close-text="Close" />
+                          <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="openETA($event)" style="margin: 0; margin-left: -1px; height: 34px;"><i class="glyphicon glyphicon-calendar"></i></button>
+                          </span>
+                        </div>
+                        <span class="text-danger" ng-if="mainForm.estimated_arrival_date.error">Please enter valid ETA</span>
+                      </div>
+                      <div class="col-md-2">
+                        <label class="form-label">Duration (in day) <span class="text-danger text-bold text-lg" ng-if="mainForm.duration.validPattern.indexOf('required')>=0">*</span></label>
+                        <input 
+                          type="text" 
+                          class="form-control" 
+                          required 
+                          disabled="" 
+                          placeholder=""
+                          ng-model="mainForm.duration.value"
+                          ng-class="{ 'b-danger': mainForm.duration.error }" />
+                        <span class="text-danger" ng-if="mainForm.duration.error">Please enter valid ETA</span>
+                      </div>
+                    </div>
+                    <div class="row form-group">
+                      <div class="col-md-2">
+                        <label class="form-label">Telex Release <span class="text-danger text-bold text-lg" ng-if="mainForm.telex.validPattern.indexOf('required')>=0">*</span></label>
+                        <select ng-model="mainForm.telex.value" required class="form-control" ng-options="vv.id as vv.item_name for vv in dropdowns.arrTelex" ng-class="{ 'b-danger': mainForm.telex.error }">
+                          <option value="">-Select an Option</option>
+                        </select>
+                        <span class="text-danger" ng-if="mainForm.telex.error">Please enter valid Telex Release</span>
+                      </div>
+                      <div class="col-md-2">
+                        <label class="form-label">Release Status <span class="text-danger text-bold text-lg" ng-if="mainForm.release_status.validPattern.indexOf('required')>=0">*</span></label>
+                        <select ng-model="mainForm.release_status.value" required class="form-control" ng-options="vv.id as vv.item_name for vv in dropdowns.arrReleaseStatus" ng-class="{ 'b-danger': mainForm.release_status.error }">
+                          <option value="">-Select an Option</option>
+                        </select>
+                        <span class="text-danger" ng-if="mainForm.release_status.error">Please enter valid Release Status</span>
+                      </div>
+                      <div class="col-md-2">
+                        <label class="form-label">Manifest <span class="text-danger text-bold text-lg" ng-if="mainForm.manifest.validPattern.indexOf('required')>=0">*</span></label>
+                        <select ng-model="mainForm.manifest.value" required class="form-control" ng-options="vv.id as vv.item_name for vv in dropdowns.arrManifest" ng-class="{ 'b-danger': mainForm.manifest.error }">
+                          <option value="">-Select an Option</option>
+                        </select>
+                        <span class="text-danger" ng-if="mainForm.manifest.error">Please enter valid Manifest</span>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label class="form-label">Forwarder Name </label>
+                          <input 
+                            type="text" 
+                            class="form-control" 
+                            required 
+                            disabled="" 
+                            placeholder=""
+                            ng-model="mainForm.forwarder_name.value"
+                            ng-class="{ 'b-danger': mainForm.forwarder_name.error }" />
+                          <span class="text-danger" ng-if="mainForm.forwarder_name.error">Please enter valid Forwarder Name</span>
+                        </div>
+                        <div class="form-group">
+                          <label class="form-label">Forwarder Amount </label>
+                          <input 
+                            type="text" 
+                            class="form-control" 
+                            required 
+                            placeholder=""
+                            ng-model="mainForm.forwarder_amount.value"
+                            ng-class="{ 'b-danger': mainForm.forwarder_amount.error }" />
+                          <span class="text-danger" ng-if="mainForm.forwarder_amount.error">Please enter valid Forwarder Amount</span>
+                        </div>
+                        <div class="form-group">
+                          <label class="form-label">Currency <span class="text-danger text-bold text-lg" ng-if="mainForm.forwarder_currency.validPattern.indexOf('required')>=0">*</span></label>
+                          <select ng-model="mainForm.forwarder_currency.value" required class="form-control" ng-options="vv.id as vv.item_name for vv in dropdowns.arrCurrency" ng-class="{ 'b-danger': mainForm.forwarder_currency.error }">
+                            <option value="">-Select an Option</option>
+                          </select>
+                          <span class="text-danger" ng-if="mainForm.forwarder_currency.error">Please enter valid Currency</span>
+                        </div>
+                        <div class="form-group">
+                          <br />
+                          <div>
+                            <input type="file" ngf-select ng-model="mainForm.forwarder_upload_file.value" name="forwarder_upload_file" style="display: inline-block;" ngf-accept="'image/*'" accept="image/*" ngf-multiple="true" />
+                          </div>
+                          <b><small>Supported files: jpg, jpeg, png</small></b>
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label class="form-label">Shipping Line Name <span class="text-danger text-bold text-lg" ng-if="mainForm.shipping_line_name.validPattern.indexOf('required')>=0">*</span></label>
+                          <input 
+                            type="text" 
+                            class="form-control" 
+                            required 
+                            placeholder=""
+                            ng-model="mainForm.shipping_line_name.value"
+                            ng-class="{ 'b-danger': mainForm.shipping_line_name.error }" />
+                          <span class="text-danger" ng-if="mainForm.shipping_line_name.error">Please enter valid Shipping Line Name</span>
+                        </div>
+                        <div class="form-group">
+                          <label class="form-label">Shipping Line Amount </label>
+                          <input 
+                            type="text" 
+                            class="form-control text-right" 
+                            required 
+                            placeholder=""
+                            ng-model="mainForm.shipping_line_amount.value"
+                            ng-class="{ 'b-danger': mainForm.shipping_line_amount.error }" />
+                          <span class="text-danger" ng-if="mainForm.shipping_line_amount.error">Please enter valid Shipping Line Amount</span>
+                        </div>
+                        <div class="form-group">
+                          <label class="form-label">Currency <span class="text-danger text-bold text-lg" ng-if="mainForm.shipping_line_currency.validPattern.indexOf('required')>=0">*</span></label>
+                          <select ng-model="mainForm.shipping_line_currency.value" required class="form-control" ng-options="vv.id as vv.item_name for vv in dropdowns.arrCurrency" ng-class="{ 'b-danger': mainForm.shipping_line_currency.error }">
+                            <option value="">-Select an Option</option>
+                          </select>
+                          <span class="text-danger" ng-if="mainForm.shipping_line_currency.error">Please enter valid Currency</span>
+                        </div>
+                        <div class="form-group">
+                          <br />
+                          <div>
+                            <input type="file" ngf-select ng-model="mainForm.shipping_line_upload_file.value" name="shipping_line_upload_file" style="display: inline-block;" ngf-accept="'image/*'" accept="image/*" ngf-multiple="true" />
+                          </div>
+                          <b><small>Supported files: jpg, jpeg, png</small></b>
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label class="form-label">Releasing Company <span class="text-danger text-bold text-lg" ng-if="mainForm.releasing_company.validPattern.indexOf('required')>=0">*</span></label>
+                          <input 
+                            type="text" 
+                            class="form-control" 
+                            required 
+                            placeholder=""
+                            ng-model="mainForm.releasing_company.value"
+                            ng-class="{ 'b-danger': mainForm.releasing_company.error }" />
+                          <span class="text-danger" ng-if="mainForm.releasing_company.error">Please enter valid Releasing Company</span>
+                        </div>
+                        <div class="form-group">
+                          <label class="form-label">Releasing Company Amount </label>
+                          <input 
+                            type="text" 
+                            class="form-control text-right" 
+                            required 
+                            placeholder=""
+                            ng-model="mainForm.releasing_company_amount.value"
+                            ng-class="{ 'b-danger': mainForm.releasing_company_amount.error }" />
+                          <span class="text-danger" ng-if="mainForm.releasing_company_amount.error">Please enter valid Releasing Company Amount</span>
+                        </div>
+                        <div class="form-group">
+                          <label class="form-label">Currency <span class="text-danger text-bold text-lg" ng-if="mainForm.releasing_company_currency.validPattern.indexOf('required')>=0">*</span></label>
+                          <select ng-model="mainForm.releasing_company_currency.value" required class="form-control" ng-options="vv.id as vv.item_name for vv in dropdowns.arrCurrency" ng-class="{ 'b-danger': mainForm.releasing_company_currency.error }">
+                            <option value="">-Select an Option</option>
+                          </select>
+                          <span class="text-danger" ng-if="mainForm.releasing_company_currency.error">Please enter valid Currency</span>
+                        </div>
+                        <div class="form-group">
+                          <br />
+                          <div>
+                            <input type="file" ngf-select ng-model="mainForm.releasing_company_upload_file.value" name="releasing_company_upload_file" style="display: inline-block;" ngf-accept="'image/*'" accept="image/*" ngf-multiple="true" />
+                          </div>
+                          <b><small>Supported files: jpg, jpeg, png</small></b>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row form-group">
+                      <div class="col-md-12">
+                        <label class="form-label">Notes <span class="text-danger text-bold text-lg" ng-if="mainForm.notes.validPattern.indexOf('required')>=0">*</span></label>
+                        <textarea
+                          class="form-control" 
+                          ng-model="mainForm.notes.name.value"
+                          ></textarea>
+                        <span class="text-danger" ng-if="mainForm.notes.error">Please enter valid Notes</span>
+                      </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr />
+                    <div class="form-group pull-right">
+                      <button ng-click="clearState()" ng-if="!mainForm.id.value" class="btn" tabindex="-1">Clear</button>
+                      <button ng-click="clearState()" ng-if="mainForm.id.value" class="btn" tabindex="-1">Cancel</button>
+                      <button ng-click="askForConfirm()" class="btn btn-primary">Save</button>
+                    </div>
+                  </div>
+                  <div class="col-md-12 section-border" ng-show="show_section=='PREVIEW'">
+                    <h4>Confirm the entered fields or Go Back to edit</h4>
+                    <div class="form-group">
+                      <div ng-if="mainForm.container_number.value">Container Number <b> {{ mainForm.container_number.value }} </b></div>
+                      <div ng-if="mainForm.invoice_number.value">Billing Number <b> {{ mainForm.billing_number.value }} </b></div>
+                      <div ng-if="mainForm.forwarder_name.value">Forwarder Name <b> {{ mainForm.forwarder_name.value }} </b></div>
+                      <div ng-if="mainForm.location.value">Location <b> {{ mainForm.location.value }} </b></div>
+                      <div ng-if="mainForm.pick_up_date.value">Loaded Date: <b>{{ mainForm.pick_up_date.value  | momentFltr:'moment': 'DD-MM-YYYY'}}</b> </div>
+                      <div ng-if="mainForm.estimated_arrival_date.value">ETA: <b>{{ mainForm.estimated_arrival_date.value  | momentFltr:'moment': 'DD-MM-YYYY'}}</b> </div>
+                      <div ng-if="mainForm.location.value">Duration: <b> {{ mainForm.duration.value }} </b></div>
+                      <div ng-if="mainForm.manifest.value">Manifest: <b> {{ mainForm.manifest.value }} </b></div>
+                      <div ng-if="mainForm.telex.value">Telex: <b> {{ mainForm.telex.value }} </b></div>
+                      <div ng-if="mainForm.release_status.value">Release Status: <b> {{ mainForm.release_status.value }} </b></div>
+                      <div ng-if="mainForm.invoice_amount.value">Invoice Amount PESCO: <b> {{ mainForm.invoice_amount.value }} </b></div>
+                      <div ng-if="mainForm.shipping_line_name.value">Shipping Line Name: <b> {{ mainForm.shipping_line_name.value }} </b></div>
+                      <div ng-if="mainForm.shipping_line_amount.value">Shipping Line Amount: <b> {{ mainForm.shipping_line_amount.value }} </b></div>
+                      <div ng-if="mainForm.releasing_company.value">Releasing Company: <b> {{ mainForm.releasing_company.value }} </b></div>
+                      <div ng-if="mainForm.releasing_company_amount.value">Releasing Company Amount: <b> {{ mainForm.releasing_company_amount.value }} </b></div>
+                      <div ng-if="mainForm.notes.value">Notes: <b> {{ mainForm.notes.value }} </b></div>
+                      <div class="clearfix"></div>
+                    </div>
+                    <hr />
+                    <div class="form-group pull-right">
+                      <button ng-click="goBackToEdit()" class="btn" tabindex="-1">Go Back</button>
+                      <button ng-click="submitForm()" class="btn btn-primary">Confirm</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /column -->
+</div>
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<!-- /hbox layout -->

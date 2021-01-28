@@ -1,0 +1,42 @@
+<div class="hbox hbox-auto-xs bg-light" ng-controller="priceDetailsController">
+  <div class="col-md-12 section-border bg-white" style="padding: 20px 28px;">    
+    <div class="col-md-12">
+      <span class="font-bold" ng-if="!mainForm.id.value">Price Details</span>
+    </div>
+    <div class="clearfix"></div>
+    <br />
+    <div class="col-md-12">
+      <div class="col-md-6">
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped table-hover nowrap">
+            <thead>
+              <tr>
+                <th class="text-center" style="background-color: #fff">Box Type</th>
+                <th class="text-center" style="background-color: #fff">KD</th>
+                <th class="text-center" style="background-color: #fff">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="v in arrPackageTypes">
+                <td class="text-center">{{v.item_name}}</td>            
+                <td class="text-right">
+                  <input type="text" class="form-control" ng-model="v.description" />
+                </td>
+                <td class="text-center">
+                  <button ng-click="updatePriceDetails(v)" class="btn btn-primary btn-xs">Update</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<!-- /hbox layout -->

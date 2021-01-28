@@ -1,0 +1,246 @@
+<!-- hbox layout -->
+<div>
+    <ul class="nav nav-tabs ng-scope" style="">
+        <li class="active">
+            <a ui-sref="app.user.userForm({userId: stateParams.userId})">Add/Edit</a>
+        </li>
+        <li>
+            <a ui-sref="app.user.userList">List</a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active">
+            <div class="hbox hbox-auto-xs" ng-controller="userFormController">
+                <div class="col-md-12">
+                  <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="form-group" ng-if="mainForm.id.value">
+                            <span class="badge bg-info"> Editing </span>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-2">
+                                <label>Full Name <span class="text-danger text-bold text-lg">*</span></label>
+                                <input 
+                                  type="text" 
+                                  class="form-control" 
+                                  required 
+                                  placeholder=""
+                                  maxlength="36" 
+                                  ng-model="mainForm.user_code.value"
+                                  ng-class="{ 'b-danger': mainForm.user_code.error }" />
+                                <span class="text-danger" ng-if="mainForm.user_code.error">Please enter valid full name</span>
+                            </div>
+                            <div class="col-md-2">
+                                <label>User Code <span class="text-danger text-bold text-lg">*</span></label>
+                                <input 
+                                  type="text" 
+                                  class="form-control" 
+                                  required 
+                                  placeholder=""
+                                  maxlength="36" 
+                                  ng-model="mainForm.full_name.value"
+                                  ng-class="{ 'b-danger': mainForm.full_name.error }" />
+                                <span class="text-danger" ng-if="mainForm.full_name.error">Please enter valid user code</span>
+                            </div>
+                            <div class="col-md-2">
+                                <label>Employee Number</label>
+                                <input 
+                                  type="text" 
+                                  class="form-control" 
+                                  required 
+                                  placeholder=""
+                                  maxlength="36" 
+                                  ng-model="mainForm.employee_number.value"
+                                  ng-class="{ 'b-danger': mainForm.employee_number.error }" />
+                                <span class="text-danger" ng-if="mainForm.employee_number.error">Please enter valid employee number</span>
+                            </div>
+                            <div class="col-md-2">
+                                <label>Username</label>
+                                <input 
+                                  type="text" 
+                                  class="form-control" 
+                                  required 
+                                  placeholder=""
+                                  maxlength="36" 
+                                  ng-model="mainForm.username.value"
+                                  ng-class="{ 'b-danger': mainForm.username.error }" />
+                                <span class="text-danger" ng-if="mainForm.username.error">Please enter valid username</span>
+                            </div>
+                            <div class="col-md-2">
+                                <label>Password</label>
+                                <input 
+                                  type="text" 
+                                  class="form-control" 
+                                  required 
+                                  placeholder=""
+                                  maxlength="36" 
+                                  ng-model="mainForm.password.value"
+                                  ng-class="{ 'b-danger': mainForm.password.error }" />
+                                <span class="text-danger" ng-if="mainForm.password.error">Please enter valid password</span>
+                            </div>
+                            <div class="col-md-2">
+                                <label>User Role <span class="text-danger text-bold text-lg">*</span></label>
+                                <select ng-model="mainForm.user_role_id.value" required class="form-control" ng-options="v.id as v.item_name for v in usersRoles" ng-class="{ 'b-danger': v.user_role_id.error }">
+                                </select>
+                                <span class="text-danger" ng-if="mainForm.full_name.error">Please enter valid User Role</span>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-2">
+                                <label>Nationality</label>
+                                <input 
+                                    type="text" 
+                                    class="form-control" 
+                                    required 
+                                    placeholder=""
+                                    ng-model="mainForm.nationality.value"
+                                    ng-class="{ 'b-danger': mainForm.nationality.error }" />
+                                <span class="text-danger" ng-if="mainForm.nationality.error">Please enter valid Nationality</span>
+                            </div>
+                            <div class="col-md-2">
+                                <label>Staff Actually Salary</label>
+                                <input 
+                                    type="text" 
+                                    class="form-control text-right" 
+                                    required 
+                                    placeholder=""
+                                    ng-model="mainForm.staff_actual_salary.value"
+                                    ng-class="{ 'b-danger': mainForm.staff_actual_salary.error }" />
+                                <span class="text-danger" ng-if="mainForm.staff_actual_salary.error">Please enter valid Staff Actually Salary</span>
+                            </div>
+                            <div class="col-md-2">
+                                <label>Residential Company</label>
+                                <select ng-model="mainForm.residential_company_id.value" class="form-control" ng-options="v.id as v.item_name for v in arrFirms"></select>
+                                <span class="text-danger" ng-if="mainForm.residential_company_id.error">Please enter valid Residential Company</span>
+                            </div>
+                            <div class="col-md-2">
+                                <label>Working Company</label>
+                                <select ng-model="mainForm.working_company_name_id.value" class="form-control" ng-options="v.id as v.item_name for v in arrFirms"></select>
+                                <span class="text-danger" ng-if="mainForm.working_company_name_id.error">Please enter valid Working Company</span>
+                            </div>
+                            <div class="col-md-2">
+                                <label>Joining Date</label>
+                                <div class="input-group w-sm">
+                                    <input 
+                                        type="text" 
+                                        class="form-control" 
+                                        datepicker-popup="{{formats}}" 
+                                        ng-model="mainForm.joining_date.value" 
+                                        is-open="openedJoiningDate" 
+                                        readonly="true" 
+                                        datepicker-options="dateOptions" 
+                                        ng-required="true" 
+                                        close-text="Close" />
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="openJoiningDate($event)" style="margin: 0; margin-left: -1px; height: 34px;"><i class="glyphicon glyphicon-calendar"></i></button>
+                                    </span>
+                                </div>
+                                <span class="text-danger" ng-if="mainForm.passport_expiry_date.error">Please enter valid Civil Expiry Date</span>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-2">
+                                <label>Passport Number</label>
+                                <input 
+                                    type="text" 
+                                    class="form-control" 
+                                    required 
+                                    placeholder=""
+                                    ng-model="mainForm.passport_number.value"
+                                    ng-class="{ 'b-danger': mainForm.passport_number.error }" />
+                                <span class="text-danger" ng-if="mainForm.passport_number.error">Please enter valid Passport Number</span>
+                            </div>
+                            <div class="col-md-2">
+                                <label>Passport Exp. Date</label>
+                                <div class="input-group w-sm">
+                                    <input 
+                                        type="text" 
+                                        class="form-control" 
+                                        datepicker-popup="{{formats}}" 
+                                        ng-model="mainForm.passport_expiry_date.value" 
+                                        is-open="opened" 
+                                        readonly="true" 
+                                        datepicker-options="dateOptions" 
+                                        ng-required="true" 
+                                        close-text="Close" />
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="openPasspostExpiryDate($event)" style="margin: 0; margin-left: -1px; height: 34px;"><i class="glyphicon glyphicon-calendar"></i></button>
+                                    </span>
+                                </div>
+                                <span class="text-danger" ng-if="mainForm.passport_expiry_date.error">Please enter valid Passport Expiry Date</span>
+                            </div>
+                            <div class="col-md-2">
+                                <label>Civil Number</label>
+                                <input 
+                                    type="text" 
+                                    class="form-control" 
+                                    required 
+                                    placeholder=""
+                                    ng-model="mainForm.civil_number.value"
+                                    ng-class="{ 'b-danger': mainForm.civil_number.error }" />
+                                <span class="text-danger" ng-if="mainForm.civil_number.error">Please enter valid Civil Number</span>
+                            </div>
+                            <div class="col-md-2">
+                                <label>Civil Exp. Date</label>
+                                <div class="input-group w-sm">
+                                    <input 
+                                        type="text" 
+                                        class="form-control" 
+                                        datepicker-popup="{{formats}}" 
+                                        ng-model="mainForm.civil_expiry_date.value" 
+                                        is-open="openedCivil" 
+                                        readonly="true" 
+                                        datepicker-options="dateOptions" 
+                                        ng-required="true" 
+                                        close-text="Close" />
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="openCivil($event)" style="margin: 0; margin-left: -1px; height: 34px;"><i class="glyphicon glyphicon-calendar"></i></button>
+                                    </span>
+                                </div>
+                                <span class="text-danger" ng-if="mainForm.passport_expiry_date.error">Please enter valid Civil Expiry Date</span>
+                            </div>
+                            <div class="col-md-2">
+                                <label>Driving License Number</label>
+                                <input 
+                                    type="text" 
+                                    class="form-control" 
+                                    required 
+                                    placeholder=""
+                                    ng-model="mainForm.driving_license_number.value"
+                                    ng-class="{ 'b-danger': mainForm.driving_license_number.error }" />
+                                <span class="text-danger" ng-if="mainForm.driving_license_number.error">Please enter valid Civil Number</span>
+                            </div>
+                            <div class="col-md-2">
+                                <label>Driving License Exp. Date</label>
+                                <div class="input-group w-sm">
+                                    <input 
+                                        type="text" 
+                                        class="form-control" 
+                                        datepicker-popup="{{formats}}" 
+                                        ng-model="mainForm.driving_license_expiry_date.value" 
+                                        is-open="openedDrivingLicense" 
+                                        readonly="true" 
+                                        datepicker-options="dateOptions" 
+                                        ng-required="true" 
+                                        close-text="Close" />
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="openDrivingLicense($event)" style="margin: 0; margin-left: -1px; height: 34px;"><i class="glyphicon glyphicon-calendar"></i></button>
+                                    </span>
+                                </div>
+                                <span class="text-danger" ng-if="mainForm.driving_license_expiry_date.error">Please enter valid Civil Expiry Date</span>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="form-group pull-right">
+                            <button ng-click="clearState()" ng-if="!mainForm.id.value" class="btn" tabindex="-1">Clear</button>
+                            <button ng-click="clearState()" ng-if="mainForm.id.value" class="btn" tabindex="-1">Cancel</button>
+                            <button ng-click="submitForm()" class="btn btn-primary">Save</button>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
